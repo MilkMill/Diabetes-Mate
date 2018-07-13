@@ -4,14 +4,16 @@ import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 export default class Diary extends React.Component {
 
     componentDidMount(){
+        
     }
     
     render() {
         return(
             <View style={styles.diary}>
                 <Text>А это дневник</Text>
-                <Text>{this.props.glucoseInput}</Text>
-                </View>
+                <Text>{this.props.glucose}</Text>
+                <Text>{this.props.date}</Text>
+            </View>
         )
     }
   }
@@ -31,5 +33,6 @@ export default class Diary extends React.Component {
   diary: {
     borderWidth: 1,
     borderRadius: 2,
+    backgroundColor: '#1fedcb'
   },
   })

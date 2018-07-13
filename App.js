@@ -9,15 +9,22 @@ export default class App extends React.Component {
     this.state = {
         glucoseInput: '',
         glucose: [],
-
+        date: [],
     }
 }
+
 saveData = () => { //MW-MiddleWare
 let glucoseInputMW = this.state.glucoseInput;
 let glucoseMW = this.state.glucose;
 let date = Date.now();
-glucoseMW.push(value: glucoseInputMW, date: date);
+let dateMW = this.state.date;
+
+
+dateMW.push(date);
+glucoseMW.push(glucoseInputMW);
 this.setState({glucose: glucoseMW});
+this.setState({date: dateMW});
+
 }
 
 render(){
@@ -35,14 +42,17 @@ render(){
             <Button 
             title='Add to data'
             onPress={this.saveData} />
-            <Text>{this.state.glucoseInput}</Text>
-            <Text>{this.state.glucose}</Text>
-            <Diary glucoseInput = {this.state.glucoseInput}/>
-            
-            </View>
+           
+            <Diary 
+            glucose = {this.state.glucose}
+            date = {this.state.date}
+            />
+
+        </View>
     );
 }
 }
+
 
 
 

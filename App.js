@@ -21,33 +21,45 @@ export default class App extends React.Component {
     super(props);
     this.state = {
         glucose: '',
+        breadUnits: '',
+        insulin: '',
         date: [],
         notes: [],
     }
 }
 
-changeTextHandler = glucose => {
-    this.setState({ glucose: glucose });
-  };
+    changeGlucoseHandler = glucose => {
+        this.setState({ glucose: glucose });
+    };
 
-  addTask = () => {
-    let notEmpty = this.state.glucose.trim().length > 0;
+    changeBuHandler = breadUnits => {
+        this.setState({ breadUnits: breadUnits });
+    };
 
-    if (notEmpty) {
-      this.setState(
-        prevState => {
-          let { notes, glucose } = prevState;
-          return {
-            notes: notes.concat({ key: notes.length, glucose: glucose }),
-            glucose: ""
-          };
-        },
-        () => Notes.save(this.state.notes)
-      );
-    }
-  };
+    changeInsulinHandler = insulin => {
+        this.setState({ insulin: insulin});
+    };
 
-  deleteTask = i => {
+    addNote = () => {
+        let notEmpty = this.state.glucose.trim().length > 0 || this.state.breadUnits.trim().length || this.state.insulin.trim().length > 0;
+
+        if (notEmpty) {
+            this.setState(
+                prevState => {
+                    let { notes, glucose, breadUnits, insulin } = prevState;
+                    return {
+                        notes: notes.concat({ key: notes.length, glucose: glucose, breadUnits: breadUnits, insulin: insulin }),
+                        glucose: "",
+                        breadUnits: '',
+                        insulin: '',
+                    };
+                },
+                () => Notes.save(this.state.notes)
+            );
+        }
+    };
+
+  deleteNote = i => {
     this.setState(
       prevState => {
         let notes = prevState.notes.slice();
@@ -80,36 +92,66 @@ render(){
     return(
         
         <View style={styles.view}>
+        <View style={styles.header}/>
           
             <TextInput 
             style={styles.textInput}
-            onChangeText={this.changeTextHandler}
-            onSubmitEditing={this.addTask}
-            value={this.state.text}
+            onChangeText={this.changeGlucoseHandler}
+            value={this.state.glucose}
             placeholder="Add Glucose"
-            placeholderTextColor='#black'
+            placeholderTextColor='black'
             textAlign='center'
-            returnKeyType="done"
-            returnKeyLabel="done"
-             />
+            keyboardType='numeric'
+            />
+           
+            <TextInput 
+            style={styles.textInput}
+            onChangeText={this.changeBuHandler}
+            value={this.state.breadUnits}
+            placeholder="Add Bread units"
+            placeholderTextColor='black'
+            textAlign='center'
+            keyboardType='numeric'
+            />
+
+            <TextInput 
+            style={styles.textInput}
+            onChangeText={this.changeInsulinHandler}
+            value={this.state.insulin}
+            placeholder="Add insulin injected"
+            placeholderTextColor='black'
+            textAlign='center'
+            keyboardType='numeric'
+            />
+
             <Button 
-            title='Add to data'
-            onPress={this.addTask} />
+            title='Save data'
+            onPress={this.addNote} />
          
          <FlatList
           style={styles.list}
           data={this.state.notes}
           renderItem={({ item, index }) =>
             <View>
-              <View style={styles.listItemCont}>
-                <Text style={styles.listItem}>
-                  {item.glucose}
-                </Text>
-                <Button title="X" onPress={() => this.deleteTask(index)} />
-              </View>
+                <View style={styles.listItemContainer}>
+                    <View style={styles.listItemComponent}>
+                        <Text style={styles.listItem}>
+                        glucose: {item.glucose}
+                        </Text>
+                        <Text style={styles.listItem}>
+                        glucose: {item.glucose}
+                        </Text>
+                        <Text style={styles.listItem}>
+                        breadUnits: {item.breadUnits}
+                        </Text>
+                        <Text style={styles.listItem}>
+                        insulin: {item.insulin}
+                        </Text>
+                    </View>
+                        <Button title="X" onPress={() => this.deleteNote(index)} />
+                </View>
               <View style={styles.hr} />
             </View>}/>
-
             </View>        
     );
 }
@@ -143,6 +185,10 @@ let Notes = {
       padding: viewPadding,
       paddingTop: 20
     },
+    header: {
+        height: 20,
+        backgroundColor: 'black'
+    },
     list: {
       width: "100%"
     },
@@ -155,10 +201,15 @@ let Notes = {
       height: 1,
       backgroundColor: "gray"
     },
-    listItemCont: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between"
+    listItemComponent: {
+      flexDirection: "column",
+    padding: 0,
+    margin: 0,
+    },
+    listItemContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
     },
     textInput: {
       height: 40,
@@ -169,5 +220,3 @@ let Notes = {
       width: "100%"
     }
   });
-  
-  AppRegistry.registerComponent("TodoList", () => TodoList);

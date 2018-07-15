@@ -1,74 +1,173 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
-import Diary from './components/Diary.js';
+import { 
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View,
+    FlatList,
+    AsyncStorage,
+    Button,
+    TextInput,
+    Keyboard,
+    Platform
+     } from 'react-native';
 
+
+const isAndroid = Platform.OS == "android";
+const viewPadding = 10;
 
 export default class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-        glucoseInput: '',
-        glucose: [],
+        glucose: '',
         date: [],
+        notes: [],
     }
 }
 
-saveData = () => { //MW-MiddleWare
-let glucoseInputMW = this.state.glucoseInput;
-let glucoseMW = this.state.glucose;
-let date = Date.now();
-let dateMW = this.state.date;
+changeTextHandler = glucose => {
+    this.setState({ glucose: glucose });
+  };
+
+  addTask = () => {
+    let notEmpty = this.state.glucose.trim().length > 0;
+
+    if (notEmpty) {
+      this.setState(
+        prevState => {
+          let { notes, glucose } = prevState;
+          return {
+            notes: notes.concat({ key: notes.length, glucose: glucose }),
+            glucose: ""
+          };
+        },
+        () => Notes.save(this.state.notes)
+      );
+    }
+  };
+
+  deleteTask = i => {
+    this.setState(
+      prevState => {
+        let notes = prevState.notes.slice();
+
+        notes.splice(i, 1);
+
+        return { notes: notes };
+      },
+      () => Notes.save(this.state.notes)
+    );
+  };
+
+  componentDidMount() {
+    Keyboard.addListener(
+      isAndroid ? "keyboardDidShow" : "keyboardWillShow",
+      e => this.setState({ viewPadding: e.endCoordinates.height + viewPadding })
+    );
+
+    Keyboard.addListener(
+      isAndroid ? "keyboardDidHide" : "keyboardWillHide",
+      () => this.setState({ viewPadding: viewPadding })
+    );
+
+    Notes.all(notes => this.setState({ notes: notes || [] }));
+  }
 
 
-dateMW.push(date);
-glucoseMW.push(glucoseInputMW);
-this.setState({glucose: glucoseMW});
-this.setState({date: dateMW});
-
-}
 
 render(){
     return(
+        
         <View style={styles.view}>
-            <Text>Это родительский компонент</Text>
+          
             <TextInput 
-            style={styles.glucose}
-            placeholder='Glucose'
-            placeholderTextColor='red'
+            style={styles.textInput}
+            onChangeText={this.changeTextHandler}
+            onSubmitEditing={this.addTask}
+            value={this.state.text}
+            placeholder="Add Glucose"
+            placeholderTextColor='#black'
             textAlign='center'
-            onChangeText={(glucoseInput) => {this.setState({glucoseInput})}}
-            inSubmitEditting={this.saveData}
+            returnKeyType="done"
+            returnKeyLabel="done"
              />
             <Button 
             title='Add to data'
-            onPress={this.saveData} />
-           
-            <Diary 
-            glucose = {this.state.glucose}
-            date = {this.state.date}
-            />
+            onPress={this.addTask} />
+         
+         <FlatList
+          style={styles.list}
+          data={this.state.notes}
+          renderItem={({ item, index }) =>
+            <View>
+              <View style={styles.listItemCont}>
+                <Text style={styles.listItem}>
+                  {item.glucose}
+                </Text>
+                <Button title="X" onPress={() => this.deleteTask(index)} />
+              </View>
+              <View style={styles.hr} />
+            </View>}/>
 
-        </View>
+            </View>        
     );
 }
 }
 
+let Notes = {
+    convertToArrayOfObject(notes, callback) {
+      return callback(
+        notes ? notes.split("||").map((note, i) => ({ key: i, glucose: note })) : []
+      );
+    },
+    convertToStringWithSeparators(notes) {
+      return notes.map(note => note.glucose).join("||");
+    },
+    all(callback) {
+      return AsyncStorage.getItem("NOTES", (err, notes) =>
+        this.convertToArrayOfObject(notes, callback)
+      );
+    },
+    save(notes) {
+      AsyncStorage.setItem("NOTES", this.convertToStringWithSeparators(notes));
+    }
+  };
 
-
-
-const styles = StyleSheet.create ({
-view: {
-    borderWidth: 1,
-    backgroundColor: 'silver',
-    margin: 20,
-},
-glucose: {
-    borderWidth: 1,
-    borderRadius: 2,
-    backgroundColor: 'powderblue'
-},
-diary: {
-  borderWidth: 1,
-  borderRadius: 2,
-},
-})
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "#F5FCFF",
+      padding: viewPadding,
+      paddingTop: 20
+    },
+    list: {
+      width: "100%"
+    },
+    listItem: {
+      paddingTop: 2,
+      paddingBottom: 2,
+      fontSize: 18
+    },
+    hr: {
+      height: 1,
+      backgroundColor: "gray"
+    },
+    listItemCont: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between"
+    },
+    textInput: {
+      height: 40,
+      paddingRight: 10,
+      paddingLeft: 10,
+      borderColor: "gray",
+      borderWidth: isAndroid ? 0 : 1,
+      width: "100%"
+    }
+  });
+  
+  AppRegistry.registerComponent("TodoList", () => TodoList);

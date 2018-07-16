@@ -23,7 +23,7 @@ export default class App extends React.Component {
         glucose: '',
         breadUnits: '',
         insulin: '',
-        date: [],
+        date: '',
         notes: [],
     }
 }
@@ -40,18 +40,29 @@ export default class App extends React.Component {
         this.setState({ insulin: insulin});
     };
 
+
     addNote = () => {
         let notEmpty = this.state.glucose.trim().length > 0 || this.state.breadUnits.trim().length || this.state.insulin.trim().length > 0;
+        
+        let newDate = new Date();
+        
+        let date1 = newDate.getDate() + '.' +
+        (newDate.getMonth() + 1) + '.' +
+        newDate.getFullYear();
+
+        this.setState({ date: date1 })
 
         if (notEmpty) {
             this.setState(
                 prevState => {
-                    let { notes, glucose, breadUnits, insulin } = prevState;
+                    let { notes, glucose, breadUnits, insulin, date } = prevState;
                     return {
-                        notes: notes.concat({ key: notes.length, glucose: glucose, breadUnits: breadUnits, insulin: insulin }),
+                        notes: notes.concat({ key: notes.length, glucose: glucose }),
+
                         glucose: "",
                         breadUnits: '',
                         insulin: '',
+                        date: '',
                     };
                 },
                 () => Notes.save(this.state.notes)
@@ -136,7 +147,7 @@ render(){
                 <View style={styles.listItemContainer}>
                     <View style={styles.listItemComponent}>
                         <Text style={styles.listItem}>
-                        glucose: {item.glucose}
+                        {item.date}
                         </Text>
                         <Text style={styles.listItem}>
                         glucose: {item.glucose}
@@ -195,7 +206,7 @@ let Notes = {
     listItem: {
       paddingTop: 2,
       paddingBottom: 2,
-      fontSize: 18
+      fontSize: 12
     },
     hr: {
       height: 1,

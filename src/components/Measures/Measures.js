@@ -19,6 +19,7 @@ class Measures extends Component{
                 <Input 
                     glucPlace = 'Enter your glucose here'
                     xePlace = 'Enter your XE here'
+                    insulinPlace='Enter your injection value'
                 />
             </View>
         )

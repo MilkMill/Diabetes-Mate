@@ -2,23 +2,32 @@ import React, { Component } from 'react';
 import { 
     StyleSheet,
     Text,
-    View
+    View,
+    ScrollView
      } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
-import Header from './src/components/Header/Header'
-import Measures from './src/components/Measures/Measures'
+import Header from './src/components/Header/Header';
+import HomeComponent from './src/components/Home';
+import LogBookComponent from './src/components/LogBook';
+import DiagramsComponent from './src/components/Diagrams';
+import AnalyticsComponent from './src/components/Analytics';
 
-class App extends Component {
-  render() {
-    return(
-      <View style={styles.appView}>
-        <Header />
-        <Measures />
-      </View>
-      
-    )
+const App = StackNavigator ({
+  Home: {
+    screen: HomeComponent,
+  },
+  LogBook: {
+    screen: LogBookComponent
+  },
+  Diagrams: {
+    screen: DiagramsComponent
+  },
+  Analytics: {
+    screen: AnalyticsComponent
   }
-}
+
+});
 
 const styles = StyleSheet.create({
   appView: {

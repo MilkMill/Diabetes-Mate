@@ -18,6 +18,7 @@ class Input extends Component{
             insulinInput: '',
             dateInput: '',
             canDateUpdate: true,
+            dates: [],
             timeInput: '',
             notes: [
                 {   
@@ -56,6 +57,7 @@ class Input extends Component{
         }
     }
 
+    //INPUT FUNCTION
 
     onGlucChange = (value) => {
         this.setState({
@@ -81,45 +83,7 @@ class Input extends Component{
         this.calculateDate();
     }
 
-    calculateDate = () => {
-        const time = new Date();
-        //Date: day
-        let day = time.getDate();
-        for ( let i = 0; i < 10; i++){
-            if (day == i) day = '0' + i;
-        }
-        //Date: month
-        let month = time.getMonth() + 1;
-        for ( let i = 0; i < 10; i++){
-            if (month == i) month = '0' + i;
-        }
-        //Date: year
-        let year = time.getFullYear().toString();
-        year = year.charAt(2) + year.charAt(3);
-        //Time: hours
-        let hours = time.getHours();
-        for ( let i = 0; i < 10; i++){
-            if (hours == i) hours = '0' + i;
-        }
-        //Time: hours
-        let minutes = time.getMinutes();
-        for ( let i = 0; i < 10; i++){
-            if (minutes == i) minutes = '0' + i;
-        }
-        
-        if ( day + '.' + month + '.' + year != this.state.notes[0].date){
-            this.setState({ 
-                dateInput: day + '.' + month + '.' + year,
-                timeInput: hours + ':' + minutes,
-                canDateUpdate: true,
-            });
-        }
-        else{
-            this.setState({
-                canDateUpdate: false
-            })
-        }
-    }
+    //TOUCHES FUNCTIONS
 
     onAddNote = (prevState) => {
         const newNote = {};
@@ -161,19 +125,78 @@ class Input extends Component{
         );
       };
 
+      //LIFECYCLE FUNCTIONS
+
       componentWillUpdate(){
   
       }
+
+      
+    //OTHER FUNCTIONS
+
+    calculateDate = () => {
+
+        let time = new Date();
+
+        let day = time.getDate();
+        for ( let i = 0; i < 10; i++){
+            if (day == i) day = '0' + i;
+        }
+
+        let weekDay = time.getDay() + 1;
+            switch(weekDay) {
+                case 1: weekDay = 'Понедельник';
+                break;
+                case 2: weekDay = 'Вторник';
+                break;
+                case 3: weekDay = 'Среда';
+                break;
+                case 4: weekDay = 'Четверг';
+                break;
+                case 5: weekDay = 'Пятница';
+                break;
+                case 6: weekDay = 'Суббота';
+                break;
+                case 7: weekDay = 'Воскресенье';
+                break;
+            }
+
+        let month = time.getMonth() + 1;
+        for ( let i = 0; i < 10; i++){
+            if (month == i) month = '0' + i;
+        }
+
+        let year = time.getFullYear().toString();
+        year = year.charAt(2) + year.charAt(3);
+
+        let hours = time.getHours();
+        for ( let i = 0; i < 10; i++){
+            if (hours == i) hours = '0' + i;
+        }
+        let minutes = time.getMinutes();
+        for ( let i = 0; i < 10; i++){
+            if (minutes == i) minutes = '0' + i;
+        }
+        
+        if ( day + '.' + month + '.' + year != this.state.notes[0].date){
+            this.setState({ 
+                dateInput: day + '.' + month + '.' + year + ', ' + weekDay,
+                timeInput: hours + ':' + minutes,
+                canDateUpdate: true,
+            });
+        }
+        else{
+            this.setState({
+                canDateUpdate: false,
+                timeInput: hours + ':' + minutes,
+            })
+        }
+    }
     
     render(){
         return(
-            <View style={styles.inputView}>
-                <Text>
-                    {this.state.canDateUpdate ? 'OBNOVIT': 'Ne OBNOVIT'}
-                </Text>
-                <Text>
-                {this.state.notes[0].date}
-                </Text>
+            
+            <View style={styles.globalView}>
                 
                 <TextInput 
                     style={styles.input}
@@ -220,6 +243,12 @@ class Input extends Component{
                         </View>
                     </TouchableOpacity>
 
+                    <View style={styles.latestView}>
+                        <Text style={styles.latest}>
+                            Latest:
+                        </Text>
+                    </View>
+
                     <FlatList
                         data={this.state.notes}
                         style={styles.listItem}
@@ -228,14 +257,12 @@ class Input extends Component{
                         onLongPress={() => this.deleteNote(index)}
                         style={styles.items}
                         >
-                            <Text style={styles.stringNoteDate}>
-                                {item.canDateUpdate ? item.date : ''}
-                            </Text>
+
                             <View>
                                 
                                 <View style={{flex: 1, flexDirection: 'column', justifyContent:'flex-start'}}>
                                 <Text style={styles.stringNote}>
-                                {item.time}
+                                {item.time}{item.canDateUpdate ? ' - ' + item.date : ''}
                                 </Text>
                                 </View>
                                 <View style={{flex: 1, flexDirection: 'row', justifyContent:'center'}}>
@@ -266,16 +293,17 @@ class Input extends Component{
                             
                             </TouchableOpacity>}
                         />
-
                         
                 </View>
+                
             </View>
+
         )
     }
 }
 
      const styles=StyleSheet.create({
-         inputView: {
+         globalView: {
             width: '100%',
             borderTopWidth: 0,
             borderTopColor: "#cecece",
@@ -307,6 +335,15 @@ class Input extends Component{
              fontSize: 14,
              fontWeight: '100',
          },
+         latestView: {
+             borderTopWidth: 3, 
+             borderTopColor: '#FCF6ED',
+             width: '100%',
+         },
+         latest: {
+            fontSize: 20,
+            fontWeight: '100',
+         },
          listItem: {
             width:'100%'
          },
@@ -314,7 +351,7 @@ class Input extends Component{
              backgroundColor: "#FBECE4",
              borderBottomWidth: 3,
              borderTopWidth: 3,
-             marginTop: 2,
+             marginTop: 5,
              borderBottomColor: "#FBE7DA",
              borderTopColor: "#FCF3ED",
          },

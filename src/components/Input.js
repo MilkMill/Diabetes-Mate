@@ -9,7 +9,7 @@ import {
     ScrollView,
      } from 'react-native';
 
-class Input extends Component{
+class HomeInput extends Component{
     constructor(){
         super();
         this.state = {
@@ -125,7 +125,7 @@ class Input extends Component{
         );
       };
 
-      //LIFECYCLE FUNCTIONS
+    //LIFECYCLE FUNCTIONS
 
       componentWillUpdate(){
   
@@ -204,8 +204,9 @@ class Input extends Component{
                     placeholderTextColor='black'                        
                     onChangeText={this.onGlucChange}
                     value={this.state.glucoseInput}
-                    underlineColorAndroid='white'
+                    underlineColorAndroid="white"
                     textAlign='center'
+                    
                     keyboardType='numeric'
                 />
                 <TextInput 
@@ -214,17 +215,17 @@ class Input extends Component{
                     placeholderTextColor='black'
                     onChangeText={this.onXeChange}
                     value={this.state.xeInput}
-                    underlineColorAndroid='white'
+                    underlineColorAndroid="white"
                     textAlign='center'
                     keyboardType='numeric'
                 />
                 <TextInput 
                     style={styles.input}
                     placeholder={this.props.insulinPlace}
-                    placeholderTextColor='black'
+                    placeholderTextColor='black' 
                     onChangeText={this.onInsulinChange}
                     value={this.state.insulinInput}
-                    underlineColorAndroid='white'
+                    underlineColorAndroid="white"
                     textAlign='center'
                     keyboardType='numeric'
                 />
@@ -238,7 +239,7 @@ class Input extends Component{
                             <Text
                                 style={styles.savingButtonText}
                             >
-                            SAVE
+                            SAVE DATA
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -249,119 +250,102 @@ class Input extends Component{
                         </Text>
                     </View>
 
-                    <FlatList
-                        data={this.state.notes}
-                        style={styles.listItem}
-                        renderItem={({ item, index }) =>
-                        <TouchableOpacity
-                        onLongPress={() => this.deleteNote(index)}
-                        style={styles.items}
-                        >
+                    {this.state.notes.map((item, i) => (
+            <TouchableOpacity
+            onPress={()=> this.deleteNote(i)}
+            key={i}
+            style={styles.listItem}
+            >
+            <View
+            style={styles.items}
+            >
 
-                            <View>
-                                
-                                <View style={{flex: 1, flexDirection: 'column', justifyContent:'flex-start'}}>
-                                <Text style={styles.stringNote}>
-                                {item.time}{item.canDateUpdate ? ' - ' + item.date : ''}
-                                </Text>
-                                </View>
-                                <View style={{flex: 1, flexDirection: 'row', justifyContent:'center'}}>
-                                <Text style={styles.stringNote}>
-                                Glucose:
-                                </Text>
-                                <Text style={styles.stringNote}>
-                                {item.glucose}
-                                </Text>
-                                </View>
-                                <View style={{flex: 1, flexDirection: 'row', justifyContent:'center'}}>
-                                <Text style={styles.stringNote}>
-                                Food:
-                                </Text>
-                                <Text style={styles.stringNote}>
-                                {item.xe}
-                                </Text>
-                                </View>
-                                <View style={{flex: 1, flexDirection: 'row', justifyContent:'center'}}>
-                                <Text style={styles.stringNote}>
-                                Insulin:
-                                </Text>
-                                <Text style={styles.stringNote}>
-                                {item.insulin}
-                                </Text>
-                                </View>
-                            </View>
-                            
-                            </TouchableOpacity>}
-                        />
-                        
-                </View>
-                
-            </View>
+            <Text
+            style={styles.item}
+            >
+            {item.time}{item.canDateUpdate? " - " + item.date : ""}</Text>
+            <Text
+            style={styles.item}
+            >
+            {item.glucose}</Text>
+            <Text
+            style={styles.item}
+            >
+            {item.xe}</Text>
+            <Text
+            style={styles.item}
+            >
+            {item.insulin}</Text>
 
+        </View>
+        </TouchableOpacity>
+        ))}
+
+           </View>
+        </View>         
         )
     }
 }
 
-     const styles=StyleSheet.create({
-         globalView: {
+    const styles=StyleSheet.create({
+        globalView: {
             width: '100%',
             borderTopWidth: 0,
             borderTopColor: "#cecece",
-         },
-         input: {
+
+        },
+        input: {
+            backgroundColor: "white",
             alignItems: 'center',
             padding: 10,
             width: '100%',
-            marginTop:10,
-            borderBottomWidth: 1,
-            borderBottomColor: '#cecece',
+            marginTop: 10,
             fontSize: 18,
             fontWeight: '100',
-            padding: 10,
-            borderTopWidth: 1,
-            borderTopColor: "#cecece",
-         },
-         saveData:{
+
+
+            
+        },
+        saveData:{
             marginTop: 20,
-            marginBottom: 30,
-            borderWidth: 1,
-            borderColor: "#cdcdcd",
+            marginBottom: 40,
+            borderWidth: 3,
+            borderColor: "#004048",
             borderRadius: 3,
             backgroundColor: "white",
             alignContent: 'center',
             padding: 8,
-         },
-         savingButtonText:{
-             fontSize: 14,
-             fontWeight: '100',
-         },
-         latestView: {
-             borderTopWidth: 3, 
-             borderTopColor: '#FCF6ED',
-             width: '100%',
-         },
-         latest: {
+        },
+        savingButtonText:{
+            fontSize: 18,
+            fontWeight: '100',
+        },
+        latestView: {
+            borderTopWidth: 3, 
+            borderTopColor: '#004048',
+            width: '100%',
+        },
+        latest: {
             fontSize: 20,
             fontWeight: '100',
-         },
-         listItem: {
-            width:'100%'
-         },
-         items: {
-             backgroundColor: "#FBECE4",
-             borderBottomWidth: 3,
-             borderTopWidth: 3,
-             marginTop: 5,
-             borderBottomColor: "#FBE7DA",
-             borderTopColor: "#FCF3ED",
-         },
-         stringNoteDate: {
-            fontSize: 18,
-         },
-         stringNote: {
-             fontSize: 16,
-             flex: 1,
-         }
+        },
+        listItem: {
+           width:'100%'
+        },
+        items: {
+            backgroundColor: "white",
+
+            marginTop: 3, 
+
+
+        },
+        stringNoteDate: {
+           fontSize: 18,
+        },
+        stringNote: {
+            fontSize: 16,
+            flex: 1,
+        }
      })
 
-export default Input;
+export default HomeInput;

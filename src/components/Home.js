@@ -10,6 +10,7 @@ import {
 
 import HomeInput from './Input'
 
+
 class HomeComponent extends Component{
 
 
@@ -20,10 +21,11 @@ class HomeComponent extends Component{
 
                     
 
+
                     <HomeInput 
                         glucPlace = 'Enter your glucose here'
-                        xePlace = 'Enter your XE here'
-                        insulinPlace='Enter your injection value'
+                        xePlace = 'Enter your bread units here'
+                        insulinPlace='Enter your injection value here'
                     />
                 </View>
 
@@ -36,6 +38,7 @@ const styles = StyleSheet.create({
     globalView: {
 
     },
+
     navButtons: {
         flex: 1,
         flexDirection: 'row',

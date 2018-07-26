@@ -8,63 +8,24 @@ import {
     ScrollView
      } from 'react-native';
 
-import Input from './Input/Input'
+import HomeInput from './Input'
+
 
 class HomeComponent extends Component{
-    static navigationOptions = {
-        title: 'D I A B E T E S   M A T E'
-    }
+
 
     render(){
-        const { navigate } = this.props.navigation;
         return(
             <ScrollView>
                 <View style={styles.globalView}>
 
-                    <View style={styles.navButtons}>
+                    
 
-                        <TouchableOpacity
-                            style={styles.navTouchable}
-                            onPress={() => {
-                                navigate('LogBook')
-                            }}>                       
-                            <View>
-                                <Text style={styles.navTouchableText}>
-                                Log Book
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={styles.navTouchable}
-                            onPress={() => {
-                                navigate('Diagrams')
-                            }}>                       
-                            <View>
-                                <Text style={styles.navTouchableText}>
-                                Diagrams
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={styles.navTouchable}
-                            onPress={() => {
-                                navigate('Analytics')
-                            }}>                       
-                            <View>
-                                <Text style={styles.navTouchableText}>
-                                Analytics
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-
-                    </View>
-
-                    <Input 
+                    <HomeInput 
                         glucPlace = 'Enter your glucose here'
-                        xePlace = 'Enter your XE here'
-                        insulinPlace='Enter your injection value'
+                        xePlace = 'Enter your bread units here'
+                        insulinPlace='Enter your injection value here'
                     />
                 </View>
 
@@ -75,8 +36,9 @@ class HomeComponent extends Component{
 
 const styles = StyleSheet.create({
     globalView: {
-        backgroundColor: 'white'
+
     },
+
     navButtons: {
         flex: 1,
         flexDirection: 'row',

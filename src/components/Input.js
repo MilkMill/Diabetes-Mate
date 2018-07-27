@@ -5,6 +5,7 @@ import {
     View,
     TextInput,
     TouchableOpacity,
+    Slider
     } from 'react-native';
 
     import LogBookComponent from './LogBook';
@@ -16,9 +17,15 @@ class HomeInput extends Component{
         super();
         this.state = {
             glucoseInput: '',
-            xeInput: '',
+            minGlucValue: 0,
+            maxGlucValue : 20,
+            glucoseSlide: null,
+            buInput: '',
+            buSlide: null,
             insulinInput: '',
+            insulinSlide: null,
             dateInput: '',
+            dayInput: '',
             canDateUpdate: true,
             dates: [],
             timeInput: '',
@@ -29,7 +36,7 @@ class HomeInput extends Component{
                     date: '05.05.18',
                     time: '12:30',
                     glucose: 5.6,
-                    xe: 3,
+                    bu: 3,
                     insulin: 4,
                     canDateUpdate: false,
                 },
@@ -38,7 +45,7 @@ class HomeInput extends Component{
                     date: '29.04.18',
                     time: '09:55',
                     glucose: 7.1,
-                    xe: 2.5,
+                    bu: 2.5,
                     insulin: 3,
                     canDateUpdate: false,
                 },
@@ -47,7 +54,7 @@ class HomeInput extends Component{
                     date: '21.04.18',
                     time: '10:22',
                     glucose: 6.2,
-                    xe: 4,
+                    bu: 4,
                     insulin: 6,
                     canDateUpdate: false,
                 },
@@ -56,7 +63,7 @@ class HomeInput extends Component{
                     date: '20.04.18',
                     time: '20:00',
                     glucose: 4.9,
-                    xe: 2,
+                    bu: 2,
                     insulin: 2,
                     canDateUpdate: true,
                 }
@@ -67,7 +74,7 @@ class HomeInput extends Component{
                     date: '05.05.18',
                     time: '12:30',
                     glucose: 5.6,
-                    xe: 3,
+                    bu: 3,
                     insulin: 4,
                     canDateUpdate: false,
                 },
@@ -76,7 +83,7 @@ class HomeInput extends Component{
                     date: '29.04.18',
                     time: '09:55',
                     glucose: 7.1,
-                    xe: 2.5,
+                    bu: 2.5,
                     insulin: 3,
                     canDateUpdate: false,
                 },
@@ -85,7 +92,7 @@ class HomeInput extends Component{
                     date: '21.04.18',
                     time: '10:22',
                     glucose: 6.2,
-                    xe: 4,
+                    bu: 4,
                     insulin: 6,
                     canDateUpdate: false,
                 },
@@ -94,7 +101,7 @@ class HomeInput extends Component{
                     date: '20.04.18',
                     time: '20:00',
                     glucose: 4.9,
-                    xe: 2,
+                    bu: 2,
                     insulin: 2,
                     canDateUpdate: true,
                 }
@@ -103,30 +110,80 @@ class HomeInput extends Component{
         }
     }
 
-    //INPUT FUNCTION
+    //INPUT FUNCTIONS
 
+    //Glucose Input
     onGlucChange = (value) => {
+        
         this.setState({
             glucoseInput: value,
-        
         })
+  
         this.calculateDate();
         this.makeLatest();
     }
 
-
-
-    onXeChange = (value) => {
+    onGlucSliding = (value) => {
+        let decimal = Math.round((value%1)*10);
+        let natural = value - value % 1;
+        if (decimal == 10){
+            decimal = 0;
+        }
         this.setState({
-            xeInput: value
+            glucoseSlide: value,
+            glucoseInput: natural + "." + decimal,
         })
         this.calculateDate();
         this.makeLatest();
     }
+
+    //Bread units Input here
+
+    onBuChange = (value) => {
+        
+        this.setState({
+            buInput: value,
+        })
+  
+        this.calculateDate();
+        this.makeLatest();
+    }
+
+    onBuSliding = (value) => {
+        let decimal = Math.round((value%1)*10);
+        let natural = value - value % 1;
+        if (decimal == 10){
+            decimal = 0;
+        }
+        this.setState({
+            buSlide: value,
+            buInput: natural + "." + decimal,
+        })
+        this.calculateDate();
+        this.makeLatest();
+    }
+
+    //Insulin Input here
 
     onInsulinChange = (value) => {
+        
         this.setState({
-            insulinInput: value
+            insulinInput: value,
+        })
+  
+        this.calculateDate();
+        this.makeLatest();
+    }
+
+    onInsulinSliding = (value) => {
+        let decimal = Math.round((value%1)*10);
+        let natural = value - value % 1;
+        if (decimal == 10){
+            decimal = 0;
+        }
+        this.setState({
+            insulinSlide: value,
+            insulinInput: natural + "." + decimal,
         })
         this.calculateDate();
         this.makeLatest();
@@ -136,15 +193,16 @@ class HomeInput extends Component{
 
     onAddNote = (prevState) => {
         const newNote = {};
-        newNote.glucose = this.state.glucoseInput;
-        newNote.xe = this.state.xeInput;
+        this.state.glucoseInput ? newNote.glucose = this.state.glucoseInput : newNote.glucose = null;
+        newNote.bu = this.state.buInput;
         newNote.insulin = this.state.insulinInput;
         newNote.date = this.state.dateInput;
         newNote.time = this.state.timeInput;
         newNote.canDateUpdate = this.state.canDateUpdate;
         newNote.id = this.state.notes[0].id + 1;
+        newNote.day = this.state.dateInput;
 
-        let notEmpty = this.state.glucoseInput.trim().length > 0 || this.state.xeInput.trim().length > 0 ||this.state.insulinInput.trim().length > 0  ;
+        let notEmpty = this.state.glucoseInput.trim().length > 0 || this.state.buInput.trim().length > 0 ||this.state.insulinInput.trim().length > 0  ;
     
         if (notEmpty) {
           this.setState(
@@ -153,9 +211,13 @@ class HomeInput extends Component{
                 notes: [newNote, ...prevState.notes],
                 latest: [newNote, ...prevState.latest],
                 glucoseInput: '',
-                xeInput: '',
+                glucoseSlide: null,
+                buInput: '',
+                buSlide: null,
                 insulinInput: '',
-                id: this.state.notes[0].id + 1
+                insulinSlide: null,
+                id: this.state.notes[0].id + 1,
+                
               };
             },
           );
@@ -166,11 +228,11 @@ class HomeInput extends Component{
     deleteNote = i => {
         this.setState(
           (prevState) => {
-            let latestNotes = prevState.latestNotes.slice();
+            let latestNotes = prevState.latest.slice();
     
             latestNotes.splice(i, 1);
     
-            return { latestNotes: latestNotes };
+            return { latest: latestNotes };
           },
 
         );
@@ -197,9 +259,10 @@ class HomeInput extends Component{
                 late.date = this.state.notes[x].date;
                 late.time = this.state.notes[x].time;
                 late.glucose = this.state.notes[x].glucose;
-                late.xe = this.state.notes[x].xe;
+                late.bu = this.state.notes[x].bu;
                 late.insulin = this.state.notes[x].insulin;
                 late.canDateUpdate = this.state.notes[x].canDateUpdate;
+                late.day = this.state.notes[x].dayInput;
                 lateArr.push(late);
             }
             this.setState({
@@ -216,9 +279,10 @@ class HomeInput extends Component{
                 late.date = this.state.notes[x].date;
                 late.time = this.state.notes[x].time;
                 late.glucose = this.state.notes[x].glucose;
-                late.xe = this.state.notes[x].xe;
+                late.bu = this.state.notes[x].bu;
                 late.insulin = this.state.notes[x].insulin;
                 late.canDateUpdate = this.state.notes[x].canDateUpdate;
+                late.day = this.state.notes[x].dayInput;
                 lateArr.push(late);
             }
             this.setState({
@@ -278,19 +342,21 @@ class HomeInput extends Component{
                 dateInput: day + '.' + month + '.' + year + ', ' + weekDay,
                 timeInput: hours + ':' + minutes,
                 canDateUpdate: true,
+                dayInput: day,
             });
         }
         else{
             this.setState({
                 canDateUpdate: false,
                 timeInput: hours + ':' + minutes,
+                dayInput: day,
             })
         }
     }
     
     render(){
         return(
-
+            
             <View style={styles.globalView}>
                 <View style={styles.modalsView}>
                     <LogBookComponent 
@@ -299,38 +365,77 @@ class HomeInput extends Component{
                     <DiagramsComponent />
                     <AnalyticsComponent />
                 </View>
+                <View
+                style={styles.sliderInput}>
+                    
+                    <Slider 
+                    style={styles.slider}
+                    minimumValue={1}
+                    maximumValue={this.state.glucoseSlide > 14.9 ? this.state.glucoseSlide > 19 ? 25: 20 : 15}
+                    value={this.state.glucoseSlide}
+                    onValueChange={this.onGlucSliding}
+                    minimumTrackTintColor="red"
+                    onSlidingComplete={this.onGlucSliding}/>
 
-                <TextInput 
-                    style={styles.input}
+                    <TextInput 
+                    style={styles.textInput}
                     placeholder={this.props.glucPlace}
                     placeholderTextColor='#705860'                        
                     onChangeText={this.onGlucChange}
                     value={this.state.glucoseInput}
-                    underlineColorAndroid="white"
+                    UnderlineColorAndroid="white"
                     textAlign='center'
-                    keyboardType='numeric'
+                    keyboardType='numeric'/>
+                </View>
 
-                />
-                <TextInput 
-                    style={styles.input}
-                    placeholder={this.props.xePlace}
-                    placeholderTextColor='#705860'
-                    onChangeText={this.onXeChange}
-                    value={this.state.xeInput}
+                 <View
+                style={styles.sliderInput}>
+                    
+                    <Slider 
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={this.state.buSlide > 7.9 ? this.state.buSlide > 15 ? 20: 15 : 8}
+                    value={this.state.buSlide}
+                    onValueChange={this.onBuSliding}
+                    minimumTrackTintColor="red"
+                    onSlidingComplete={this.onBuSliding}/>
+
+                    <TextInput 
+                    style={styles.textInput}
+                    placeholder={this.props.buPlace}
+                    placeholderTextColor='#705860'                        
+                    onChangeText={this.onBuChange}
+                    value={this.state.buInput}
                     underlineColorAndroid="white"
                     textAlign='center'
-                    keyboardType='numeric'
-                />
-                <TextInput 
-                    style={styles.input}
+                    keyboardType='numeric'/>
+
+                </View>
+
+                <View
+                style={styles.sliderInput}>
+
+                    <Slider 
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={this.state.insulinSlide > 9.9 ? this.state.insulinSlide > 15 ? 25: 15 : 10}
+                    value={this.state.insulinSlide}
+                    onValueChange={this.onInsulinSliding}
+                    minimumTrackTintColor="red"
+                    onSlidingComplete={this.onInsulinSliding}/>
+
+                    <TextInput 
+                    style={styles.textInput}
                     placeholder={this.props.insulinPlace}
-                    placeholderTextColor='#705960' 
+                    placeholderTextColor='#705860'                        
                     onChangeText={this.onInsulinChange}
                     value={this.state.insulinInput}
                     underlineColorAndroid="white"
                     textAlign='center'
                     keyboardType='numeric'
-                />
+                    />
+
+                </View>
 
                 <View alignItems='center'>
                     <TouchableOpacity
@@ -364,11 +469,12 @@ class HomeInput extends Component{
 
                                 <View style={styles.measuresItemView}>
                                 <Text style={styles.item}>
-                                Glucose: {item.glucose}
+                                {item.glucose == null || item.glucose == '1.0' ? '' : 'Glucose: ' + item.glucose}
                                 </Text>
                                 <Text style={styles.item}>
-                                Bread Units: {item.xe}
+                                Bread Units: {item.bu}
                                 </Text>
+
                                 <Text style={styles.item}>
                                 Injected insulin: {item.insulin}
                                 </Text>
@@ -383,7 +489,7 @@ class HomeInput extends Component{
                                 <Text 
                                 style={styles.dateItem}
                                 textAlign='center'>
-                                {item.date}
+                                {this.state.notes[i].date.split('.')[0]  == this.state.dayInput.toString() ? 'Today' : item.date}
                                 </Text>
                                 </View>
                             </View>
@@ -391,7 +497,8 @@ class HomeInput extends Component{
                     ))}
 
            </View>
-        </View>         
+        </View>    
+             
         )
     }
 }
@@ -405,14 +512,23 @@ const styles=StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 20,
     },
-    input: {
+    textInput: {
         backgroundColor: "white",
         alignItems: 'center',
         padding: 10,
-        width: '100%',
         marginTop: 10,
         fontSize: 18,
         fontWeight: '100',
+        width: 80
+    },
+    sliderInput: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
+
+    },
+    slider:{
+        width:'70%'
     },
     saveData:{
         marginTop: 20,

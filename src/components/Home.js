@@ -24,7 +24,7 @@ class HomeComponent extends Component{
 
                     <HomeInput 
                         glucPlace = 'Enter your glucose here'
-                        xePlace = 'Enter your bread units here'
+                        buPlace = 'Enter your bread units here'
                         insulinPlace='Enter your injection value here'
                     />
                 </View>

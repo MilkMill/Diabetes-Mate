@@ -5,106 +5,219 @@ import {
     View,
     TextInput,
     TouchableOpacity,
-    FlatList,
-    ScrollView,
-     } from 'react-native';
+    Slider
+    } from 'react-native';
 
-class Input extends Component{
+    import LogBookComponent from './LogBook';
+    import DiagramsComponent from './Diagrams';
+    import AnalyticsComponent from './Analytics';
+
+class HomeInput extends Component{
     constructor(){
         super();
         this.state = {
             glucoseInput: '',
-            xeInput: '',
+            minGlucValue: 0,
+            maxGlucValue : 20,
+            glucoseSlide: null,
+            buInput: '',
+            buSlide: null,
             insulinInput: '',
+            insulinSlide: null,
             dateInput: '',
+            dayInput: '',
             canDateUpdate: true,
             dates: [],
             timeInput: '',
-            notes: [
+            id: '',
+            latest: [
                 {   
-                    date: '20.04.18',
-                    time: '20:40',
+                    id: 4,
+                    date: '05.05.18',
+                    time: '12:30',
                     glucose: 5.6,
-                    xe: 3,
+                    bu: 3,
                     insulin: 4,
                     canDateUpdate: false,
                 },
                 {   
-                    date: '20.04.18',
-                    time: '20:40',
+                    id: 3,                    
+                    date: '29.04.18',
+                    time: '09:55',
                     glucose: 7.1,
-                    xe: 2.5,
+                    bu: 2.5,
                     insulin: 3,
                     canDateUpdate: false,
                 },
                 {
-                    date: '20.04.18',
-                    time: '20:40',
+                    id: 2,
+                    date: '21.04.18',
+                    time: '10:22',
                     glucose: 6.2,
-                    xe: 4,
+                    bu: 4,
                     insulin: 6,
                     canDateUpdate: false,
                 },
                 {
+                    id: 1,
                     date: '20.04.18',
-                    time: '20:40',
+                    time: '20:00',
                     glucose: 4.9,
-                    xe: 2,
+                    bu: 2,
                     insulin: 2,
                     canDateUpdate: true,
                 }
-            ],           
+            ],    
+            notes: [
+                {   
+                    id: 4,
+                    date: '05.05.18',
+                    time: '12:30',
+                    glucose: 5.6,
+                    bu: 3,
+                    insulin: 4,
+                    canDateUpdate: false,
+                },
+                {   
+                    id: 3,                    
+                    date: '29.04.18',
+                    time: '09:55',
+                    glucose: 7.1,
+                    bu: 2.5,
+                    insulin: 3,
+                    canDateUpdate: false,
+                },
+                {
+                    id: 2,
+                    date: '21.04.18',
+                    time: '10:22',
+                    glucose: 6.2,
+                    bu: 4,
+                    insulin: 6,
+                    canDateUpdate: false,
+                },
+                {
+                    id: 1,
+                    date: '20.04.18',
+                    time: '20:00',
+                    glucose: 4.9,
+                    bu: 2,
+                    insulin: 2,
+                    canDateUpdate: true,
+                }
+            ],    
+            latestNotes:[],       
         }
     }
 
-    //INPUT FUNCTION
+    //INPUT FUNCTIONS
 
+    //Glucose Input
     onGlucChange = (value) => {
+        
         this.setState({
             glucoseInput: value,
-        
         })
+  
         this.calculateDate();
+        this.makeLatest();
     }
 
-
-
-    onXeChange = (value) => {
+    onGlucSliding = (value) => {
+        let decimal = Math.round((value%1)*10);
+        let natural = value - value % 1;
+        if (decimal == 10){
+            decimal = 0;
+        }
         this.setState({
-            xeInput: value
+            glucoseSlide: value,
+            glucoseInput: natural + "." + decimal,
         })
         this.calculateDate();
+        this.makeLatest();
     }
+
+    //Bread units Input here
+
+    onBuChange = (value) => {
+        
+        this.setState({
+            buInput: value,
+        })
+  
+        this.calculateDate();
+        this.makeLatest();
+    }
+
+    onBuSliding = (value) => {
+        let decimal = Math.round((value%1)*10);
+        let natural = value - value % 1;
+        if (decimal == 10){
+            decimal = 0;
+        }
+        this.setState({
+            buSlide: value,
+            buInput: natural + "." + decimal,
+        })
+        this.calculateDate();
+        this.makeLatest();
+    }
+
+    //Insulin Input here
 
     onInsulinChange = (value) => {
+        
         this.setState({
-            insulinInput: value
+            insulinInput: value,
+        })
+  
+        this.calculateDate();
+        this.makeLatest();
+    }
+
+    onInsulinSliding = (value) => {
+        let decimal = Math.round((value%1)*10);
+        let natural = value - value % 1;
+        if (decimal == 10){
+            decimal = 0;
+        }
+        this.setState({
+            insulinSlide: value,
+            insulinInput: natural + "." + decimal,
         })
         this.calculateDate();
+        this.makeLatest();
     }
 
     //TOUCHES FUNCTIONS
 
     onAddNote = (prevState) => {
         const newNote = {};
-        newNote.glucose = this.state.glucoseInput;
-        newNote.xe = this.state.xeInput;
+        this.state.glucoseInput ? newNote.glucose = this.state.glucoseInput : newNote.glucose = null;
+        newNote.bu = this.state.buInput;
         newNote.insulin = this.state.insulinInput;
         newNote.date = this.state.dateInput;
         newNote.time = this.state.timeInput;
         newNote.canDateUpdate = this.state.canDateUpdate;
+        newNote.id = this.state.notes[0].id + 1;
+        newNote.day = this.state.dateInput;
 
-        
-        let notEmpty = this.state.glucoseInput.trim().length > 0 || this.state.xeInput.trim().length > 0 ||this.state.insulinInput.trim().length > 0  ;
+        let notEmpty = this.state.glucoseInput.trim().length > 0 || this.state.buInput.trim().length > 0 ||this.state.insulinInput.trim().length > 0  ;
     
         if (notEmpty) {
           this.setState(
             (prevState) => {
               return {
                 notes: [newNote, ...prevState.notes],
+                latest: [newNote, ...prevState.latest],
                 glucoseInput: '',
-                xeInput: '',
+                glucoseSlide: null,
+                buInput: '',
+                buSlide: null,
                 insulinInput: '',
+                insulinSlide: null,
+                id: this.state.notes[0].id + 1,
+                
               };
             },
           );
@@ -112,20 +225,20 @@ class Input extends Component{
         else { alert('Введите значение')}
       };
     
-      deleteNote = i => {
+    deleteNote = i => {
         this.setState(
           (prevState) => {
-            let notes = prevState.notes.slice();
+            let latestNotes = prevState.latest.slice();
     
-            notes.splice(i, 1);
+            latestNotes.splice(i, 1);
     
-            return { notes: notes };
+            return { latest: latestNotes };
           },
 
         );
       };
 
-      //LIFECYCLE FUNCTIONS
+    //LIFECYCLE FUNCTIONS
 
       componentWillUpdate(){
   
@@ -133,6 +246,52 @@ class Input extends Component{
 
       
     //OTHER FUNCTIONS
+
+    makeLatest = () => {
+        if (this.state.latest){
+        {if (this.state.latest.length < 5) {
+            let lateArr = [];
+        
+            for (  x = 0; x < this.state.latest.length; x++){
+                let late = {};
+                
+                late.id = this.state.notes[x].id;
+                late.date = this.state.notes[x].date;
+                late.time = this.state.notes[x].time;
+                late.glucose = this.state.notes[x].glucose;
+                late.bu = this.state.notes[x].bu;
+                late.insulin = this.state.notes[x].insulin;
+                late.canDateUpdate = this.state.notes[x].canDateUpdate;
+                late.day = this.state.notes[x].dayInput;
+                lateArr.push(late);
+            }
+            this.setState({
+                latest: lateArr,
+            })
+        }
+        else{
+            let lateArr = [];
+        
+            for (  x = 0; x < 5; x++){
+                let late = {};
+                
+                late.id = this.state.notes[x].id;
+                late.date = this.state.notes[x].date;
+                late.time = this.state.notes[x].time;
+                late.glucose = this.state.notes[x].glucose;
+                late.bu = this.state.notes[x].bu;
+                late.insulin = this.state.notes[x].insulin;
+                late.canDateUpdate = this.state.notes[x].canDateUpdate;
+                late.day = this.state.notes[x].dayInput;
+                lateArr.push(late);
+            }
+            this.setState({
+                latest: lateArr,
+            })
+        }
+    }
+        }
+    }
 
     calculateDate = () => {
 
@@ -183,12 +342,14 @@ class Input extends Component{
                 dateInput: day + '.' + month + '.' + year + ', ' + weekDay,
                 timeInput: hours + ':' + minutes,
                 canDateUpdate: true,
+                dayInput: day,
             });
         }
         else{
             this.setState({
                 canDateUpdate: false,
                 timeInput: hours + ':' + minutes,
+                dayInput: day,
             })
         }
     }
@@ -197,37 +358,84 @@ class Input extends Component{
         return(
             
             <View style={styles.globalView}>
-                
-                <TextInput 
-                    style={styles.input}
+                <View style={styles.modalsView}>
+                    <LogBookComponent 
+                    notes={this.state.notes}
+                    />
+                    <DiagramsComponent />
+                    <AnalyticsComponent />
+                </View>
+                <View
+                style={styles.sliderInput}>
+                    
+                    <Slider 
+                    style={styles.slider}
+                    minimumValue={1}
+                    maximumValue={this.state.glucoseSlide > 14.9 ? this.state.glucoseSlide > 19 ? 25: 20 : 15}
+                    value={this.state.glucoseSlide}
+                    onValueChange={this.onGlucSliding}
+                    minimumTrackTintColor="red"
+                    onSlidingComplete={this.onGlucSliding}/>
+
+                    <TextInput 
+                    style={styles.textInput}
                     placeholder={this.props.glucPlace}
-                    placeholderTextColor='black'                        
+                    placeholderTextColor='#705860'                        
                     onChangeText={this.onGlucChange}
                     value={this.state.glucoseInput}
-                    underlineColorAndroid='white'
+                    UnderlineColorAndroid="white"
                     textAlign='center'
-                    keyboardType='numeric'
-                />
-                <TextInput 
-                    style={styles.input}
-                    placeholder={this.props.xePlace}
-                    placeholderTextColor='black'
-                    onChangeText={this.onXeChange}
-                    value={this.state.xeInput}
-                    underlineColorAndroid='white'
+                    keyboardType='numeric'/>
+                </View>
+
+                 <View
+                style={styles.sliderInput}>
+                    
+                    <Slider 
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={this.state.buSlide > 7.9 ? this.state.buSlide > 15 ? 20: 15 : 8}
+                    value={this.state.buSlide}
+                    onValueChange={this.onBuSliding}
+                    minimumTrackTintColor="red"
+                    onSlidingComplete={this.onBuSliding}/>
+
+                    <TextInput 
+                    style={styles.textInput}
+                    placeholder={this.props.buPlace}
+                    placeholderTextColor='#705860'                        
+                    onChangeText={this.onBuChange}
+                    value={this.state.buInput}
+                    underlineColorAndroid="white"
                     textAlign='center'
-                    keyboardType='numeric'
-                />
-                <TextInput 
-                    style={styles.input}
+                    keyboardType='numeric'/>
+
+                </View>
+
+                <View
+                style={styles.sliderInput}>
+
+                    <Slider 
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={this.state.insulinSlide > 9.9 ? this.state.insulinSlide > 15 ? 25: 15 : 10}
+                    value={this.state.insulinSlide}
+                    onValueChange={this.onInsulinSliding}
+                    minimumTrackTintColor="red"
+                    onSlidingComplete={this.onInsulinSliding}/>
+
+                    <TextInput 
+                    style={styles.textInput}
                     placeholder={this.props.insulinPlace}
-                    placeholderTextColor='black'
+                    placeholderTextColor='#705860'                        
                     onChangeText={this.onInsulinChange}
                     value={this.state.insulinInput}
-                    underlineColorAndroid='white'
+                    underlineColorAndroid="white"
                     textAlign='center'
                     keyboardType='numeric'
-                />
+                    />
+
+                </View>
 
                 <View alignItems='center'>
                     <TouchableOpacity
@@ -238,7 +446,7 @@ class Input extends Component{
                             <Text
                                 style={styles.savingButtonText}
                             >
-                            SAVE
+                            SAVE DATA
                             </Text>
                         </View>
                     </TouchableOpacity>
@@ -249,119 +457,142 @@ class Input extends Component{
                         </Text>
                     </View>
 
-                    <FlatList
-                        data={this.state.notes}
-                        style={styles.listItem}
-                        renderItem={({ item, index }) =>
+                    {
+                        this.state.latest.map((item, i ) => (
+                            
                         <TouchableOpacity
-                        onLongPress={() => this.deleteNote(index)}
-                        style={styles.items}
+                            onLongPress ={()=> this.deleteNote(i)}
+                            key={i}
+                            style={styles.listItem}
                         >
+                            <View style={styles.itemsBlock}>
 
-                            <View>
-                                
-                                <View style={{flex: 1, flexDirection: 'column', justifyContent:'flex-start'}}>
-                                <Text style={styles.stringNote}>
-                                {item.time}{item.canDateUpdate ? ' - ' + item.date : ''}
+                                <View style={styles.measuresItemView}>
+                                <Text style={styles.item}>
+                                {item.glucose == null || item.glucose == '1.0' ? '' : 'Glucose: ' + item.glucose}
+                                </Text>
+                                <Text style={styles.item}>
+                                Bread Units: {item.bu}
+                                </Text>
+
+                                <Text style={styles.item}>
+                                Injected insulin: {item.insulin}
                                 </Text>
                                 </View>
-                                <View style={{flex: 1, flexDirection: 'row', justifyContent:'center'}}>
-                                <Text style={styles.stringNote}>
-                                Glucose:
+
+                                <View style={styles.dateItemView}>
+                                <Text
+                                style={styles.dateItem}
+                                textAlign='center'>
+                                {item.time}
                                 </Text>
-                                <Text style={styles.stringNote}>
-                                {item.glucose}
-                                </Text>
-                                </View>
-                                <View style={{flex: 1, flexDirection: 'row', justifyContent:'center'}}>
-                                <Text style={styles.stringNote}>
-                                Food:
-                                </Text>
-                                <Text style={styles.stringNote}>
-                                {item.xe}
-                                </Text>
-                                </View>
-                                <View style={{flex: 1, flexDirection: 'row', justifyContent:'center'}}>
-                                <Text style={styles.stringNote}>
-                                Insulin:
-                                </Text>
-                                <Text style={styles.stringNote}>
-                                {item.insulin}
+                                <Text 
+                                style={styles.dateItem}
+                                textAlign='center'>
+                                {this.state.notes[i].date.split('.')[0]  == this.state.dayInput.toString() ? 'Today' : item.date}
                                 </Text>
                                 </View>
                             </View>
-                            
-                            </TouchableOpacity>}
-                        />
-                        
-                </View>
-                
-            </View>
+                        </TouchableOpacity>
+                    ))}
 
+           </View>
+        </View>    
+             
         )
     }
 }
 
-     const styles=StyleSheet.create({
-         globalView: {
-            width: '100%',
-            borderTopWidth: 0,
-            borderTopColor: "#cecece",
-         },
-         input: {
-            alignItems: 'center',
-            padding: 10,
-            width: '100%',
-            marginTop:10,
-            borderBottomWidth: 1,
-            borderBottomColor: '#cecece',
-            fontSize: 18,
-            fontWeight: '100',
-            padding: 10,
-            borderTopWidth: 1,
-            borderTopColor: "#cecece",
-         },
-         saveData:{
-            marginTop: 20,
-            marginBottom: 30,
-            borderWidth: 1,
-            borderColor: "#cdcdcd",
-            borderRadius: 3,
-            backgroundColor: "white",
-            alignContent: 'center',
-            padding: 8,
-         },
-         savingButtonText:{
-             fontSize: 14,
-             fontWeight: '100',
-         },
-         latestView: {
-             borderTopWidth: 3, 
-             borderTopColor: '#FCF6ED',
-             width: '100%',
-         },
-         latest: {
-            fontSize: 20,
-            fontWeight: '100',
-         },
-         listItem: {
-            width:'100%'
-         },
-         items: {
-             backgroundColor: "#FBECE4",
-             borderBottomWidth: 3,
-             borderTopWidth: 3,
-             marginTop: 5,
-             borderBottomColor: "#FBE7DA",
-             borderTopColor: "#FCF3ED",
-         },
-         stringNoteDate: {
-            fontSize: 18,
-         },
-         stringNote: {
-             fontSize: 16,
-             flex: 1,
-         }
-     })
+const styles=StyleSheet.create({
+    globalView: {
+        width: '100%',
+    },
+    modalsView: {
+        justifyContent: 'space-evenly',
+        flexDirection: 'row',
+        marginBottom: 20,
+    },
+    textInput: {
+        backgroundColor: "white",
+        alignItems: 'center',
+        padding: 10,
+        marginTop: 10,
+        fontSize: 18,
+        fontWeight: '100',
+        width: 80
+    },
+    sliderInput: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
 
-export default Input;
+    },
+    slider:{
+        width:'70%'
+    },
+    saveData:{
+        marginTop: 20,
+        marginBottom: 40,
+        borderWidth: 3,
+        borderColor: "#004048",
+        borderRadius: 3,
+        backgroundColor: "white",
+        alignContent: 'center',
+        padding: 8,
+    },
+    savingButtonText:{
+        fontSize: 18,
+        fontWeight: '100',
+    },
+    latestView: {
+        borderTopWidth: 3, 
+        borderTopColor: '#004048',
+        width: '100%',
+    },
+    latest: {
+        fontSize: 20,
+        fontWeight: '100',
+    },
+    listItem: {
+        width:'100%'
+    },
+    itemsBlock: {
+        flex:1,
+        marginTop: 3, 
+        flexDirection: "row",
+        justifyContent: "space-evenly"
+    },
+    measuresItemView: {
+        backgroundColor: "white",
+        flex:1,
+        borderWidth: 2,
+        justifyContent: 'center',
+        margin: 1,
+    },
+    dateItemView: {
+        backgroundColor: "white",
+        flex: 1,
+        alignItems: 'center',
+        alignContent: 'center',
+        borderWidth: 2,
+        justifyContent: 'center',
+        margin: 1,
+    },
+    item: {
+        fontSize: 16,
+        padding: 5,
+    },
+    dateItem: {
+        fontSize: 16,
+        padding: 5,
+    },
+    stringNoteDate: {
+        fontSize: 18,
+    },
+    stringNote: {
+        fontSize: 16,
+        flex: 1,
+    }
+})
+
+export default HomeInput;

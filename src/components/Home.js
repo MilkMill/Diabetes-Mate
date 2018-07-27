@@ -8,12 +8,10 @@ import {
     ScrollView
      } from 'react-native';
 
-import Input from './Input/Input'
+import Input from './Input'
 
 class HomeComponent extends Component{
-    static navigationOptions = {
-        title: 'D I A B E T E S   M A T E'
-    }
+
 
     render(){
         const { navigate } = this.props.navigation;

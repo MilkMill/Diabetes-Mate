@@ -24,7 +24,7 @@ class AnalyticsComponent extends Component {
                 onPress={this.handleModal}>                   
                 <View>
                     <Text style={styles.modalTouchText}>
-                    ANALYTICS
+                    АНАЛИТИКА
                     </Text>
                 </View>
                 </TouchableOpacity>
@@ -57,9 +57,9 @@ const styles = StyleSheet.create({
     },
     modalTouch: {
         backgroundColor: "white",
-        borderWidth: 3,
+        borderBottomWidth: 1,
         borderColor: "#004048",
-        margin: 10,
+        margin: 0,
         padding: 10,
         alignItems: 'center',
 

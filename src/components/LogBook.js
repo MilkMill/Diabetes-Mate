@@ -27,7 +27,7 @@ class LogBookComponent extends Component {
                 onPress={this.handleModal}>   
                     <View>
                         <Text style={styles.modalTouchText}>
-                        LOG BOOK
+                        ЖУРНАЛ
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -44,7 +44,7 @@ class LogBookComponent extends Component {
                             <View style={styles.headerView} alignItems= 'center'>
                                 <View style={styles.header}/>
                                     <Text style={styles.headerText}>
-                                        L O G   B O O K
+                                        ЖУРНАЛ
                                     </Text>
                                 </View>
                             <View style={styles.border}/>
@@ -55,7 +55,7 @@ class LogBookComponent extends Component {
                             onPress={this.handleModal}
                             style={styles.backButton}>
                                 <Text style={styles.backButtonText}>
-                                    BACK
+                                    НАЗАД
                                 </Text>
                              </TouchableOpacity>
                         </View>
@@ -146,9 +146,9 @@ const styles = StyleSheet.create({
     },
     modalTouch: {
         backgroundColor: "white",
-        borderWidth: 3,
+        borderBottomWidth: 1,
         borderColor: "#004048",
-        margin: 10,
+        margin: 0,
         padding: 10,
         alignItems: 'center',
 

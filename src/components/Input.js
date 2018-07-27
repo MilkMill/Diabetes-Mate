@@ -5,12 +5,15 @@ import {
     View,
     TextInput,
     TouchableOpacity,
-    Slider
+    Slider,
+    Image,
+    ImageBackground
     } from 'react-native';
 
     import LogBookComponent from './LogBook';
     import DiagramsComponent from './Diagrams';
     import AnalyticsComponent from './Analytics';
+    import Planet from '../assets/Vegetales.jpg';
 
 class HomeInput extends Component{
     constructor(){
@@ -358,55 +361,56 @@ class HomeInput extends Component{
         return(
             
             <View style={styles.globalView}>
+
                 <View style={styles.modalsView}>
-                    <LogBookComponent 
-                    notes={this.state.notes}
-                    />
+                    <LogBookComponent notes={this.state.notes}/>
                     <DiagramsComponent />
                     <AnalyticsComponent />
                 </View>
+                
                 <View
                 style={styles.sliderInput}>
-                    
-                    <Slider 
-                    style={styles.slider}
-                    minimumValue={1}
-                    maximumValue={this.state.glucoseSlide > 14.9 ? this.state.glucoseSlide > 19 ? 25: 20 : 15}
-                    value={this.state.glucoseSlide}
-                    onValueChange={this.onGlucSliding}
-                    minimumTrackTintColor="red"
-                    onSlidingComplete={this.onGlucSliding}/>
+                    <View style={styles.sliderView}>
+                        <Slider 
+                        style={styles.slider}
+                        minimumValue={1}
+                        maximumValue={this.state.glucoseSlide > 14.9 ? this.state.glucoseSlide > 19 ? 25: 20 : 15}
+                        value={this.state.glucoseSlide}
+                        onValueChange={this.onGlucSliding}
+                        minimumTrackTintColor="red"
+                        onSlidingComplete={this.onGlucSliding}/>
+                    </View>
 
                     <TextInput 
                     style={styles.textInput}
                     placeholder={this.props.glucPlace}
-                    placeholderTextColor='#705860'                        
+                    placeholderTextColor='black'                        
                     onChangeText={this.onGlucChange}
                     value={this.state.glucoseInput}
-                    UnderlineColorAndroid="white"
+                    underlineColorAndroid="#087078"
                     textAlign='center'
                     keyboardType='numeric'/>
                 </View>
 
                  <View
                 style={styles.sliderInput}>
-                    
-                    <Slider 
-                    style={styles.slider}
-                    minimumValue={0}
-                    maximumValue={this.state.buSlide > 7.9 ? this.state.buSlide > 15 ? 20: 15 : 8}
-                    value={this.state.buSlide}
-                    onValueChange={this.onBuSliding}
-                    minimumTrackTintColor="red"
-                    onSlidingComplete={this.onBuSliding}/>
-
+                    <View style={styles.sliderView}>
+                        <Slider 
+                        style={styles.slider}
+                        minimumValue={0}
+                        maximumValue={this.state.buSlide > 7.9 ? this.state.buSlide > 15 ? 20: 15 : 8}
+                        value={this.state.buSlide}
+                        onValueChange={this.onBuSliding}
+                        minimumTrackTintColor="red"
+                        onSlidingComplete={this.onBuSliding}/>
+                    </View>
                     <TextInput 
                     style={styles.textInput}
                     placeholder={this.props.buPlace}
-                    placeholderTextColor='#705860'                        
+                    placeholderTextColor='black'                        
                     onChangeText={this.onBuChange}
                     value={this.state.buInput}
-                    underlineColorAndroid="white"
+                    underlineColorAndroid="#087078"
                     textAlign='center'
                     keyboardType='numeric'/>
 
@@ -414,23 +418,24 @@ class HomeInput extends Component{
 
                 <View
                 style={styles.sliderInput}>
-
-                    <Slider 
-                    style={styles.slider}
-                    minimumValue={0}
-                    maximumValue={this.state.insulinSlide > 9.9 ? this.state.insulinSlide > 15 ? 25: 15 : 10}
-                    value={this.state.insulinSlide}
-                    onValueChange={this.onInsulinSliding}
-                    minimumTrackTintColor="red"
-                    onSlidingComplete={this.onInsulinSliding}/>
+                    <View style={styles.sliderView}>
+                        <Slider 
+                        style={styles.slider}
+                        minimumValue={0}
+                        maximumValue={this.state.insulinSlide > 9.9 ? this.state.insulinSlide > 15 ? 25: 15 : 10}
+                        value={this.state.insulinSlide}
+                        onValueChange={this.onInsulinSliding}
+                        minimumTrackTintColor="red"
+                        onSlidingComplete={this.onInsulinSliding}/>
+                    </View>
 
                     <TextInput 
                     style={styles.textInput}
                     placeholder={this.props.insulinPlace}
-                    placeholderTextColor='#705860'                        
+                    placeholderTextColor='black'                        
                     onChangeText={this.onInsulinChange}
                     value={this.state.insulinInput}
-                    underlineColorAndroid="white"
+                    underlineColorAndroid="#087078"
                     textAlign='center'
                     keyboardType='numeric'
                     />
@@ -442,18 +447,16 @@ class HomeInput extends Component{
                         style={styles.saveData}
                         onPress={this.onAddNote}
                     >                       
-                        <View>
-                            <Text
-                                style={styles.savingButtonText}
-                            >
-                            SAVE DATA
+                        
+                            <Text style={styles.savingButtonText} textAlign='center'>
+                            СОХРАНИТЬ ДАННЫЕ
                             </Text>
-                        </View>
+                        
                     </TouchableOpacity>
 
                     <View style={styles.latestView}>
                         <Text style={styles.latest}>
-                            Latest:
+                            Последние записи
                         </Text>
                     </View>
 
@@ -469,14 +472,15 @@ class HomeInput extends Component{
 
                                 <View style={styles.measuresItemView}>
                                 <Text style={styles.item}>
-                                {item.glucose == null || item.glucose == '1.0' ? '' : 'Glucose: ' + item.glucose}
-                                </Text>
-                                <Text style={styles.item}>
-                                Bread Units: {item.bu}
+                                {item.glucose == null || item.glucose == '1.0' ? '' : 'Сахар: ' + item.glucose}
                                 </Text>
 
                                 <Text style={styles.item}>
-                                Injected insulin: {item.insulin}
+                                ХЕ: {item.bu}
+                                </Text>
+
+                                <Text style={styles.item}>
+                                Инсулин: {item.insulin}
                                 </Text>
                                 </View>
 
@@ -504,6 +508,7 @@ class HomeInput extends Component{
 }
 
 const styles=StyleSheet.create({
+
     globalView: {
         width: '100%',
     },
@@ -511,33 +516,52 @@ const styles=StyleSheet.create({
         justifyContent: 'space-evenly',
         flexDirection: 'row',
         marginBottom: 20,
+        backgroundColor: 'white',
+        padding: 5,
     },
     textInput: {
-        backgroundColor: "white",
+
         alignItems: 'center',
         padding: 10,
         marginTop: 10,
         fontSize: 18,
         fontWeight: '100',
-        width: 80
+        width: 80,
+
     },
     sliderInput: {
         flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
 
     },
+    sliderView: {
+        marginTop: 10,
+        marginBottom: 0,
+        borderWidth: 2,
+        borderColor: "#003840",
+        borderRadius: 50,
+        backgroundColor: "white",
+        alignContent: 'center',
+        padding: 10,
+        width: '70%'
+    },
     slider:{
-        width:'70%'
+        width:'100%',
+        padding: 5,
+        
     },
     saveData:{
         marginTop: 20,
         marginBottom: 40,
-        borderWidth: 3,
-        borderColor: "#004048",
-        borderRadius: 3,
+        width: '100%',
+        borderBottomWidth: 3,
+        borderTopWidth: 3,
+        borderBottomColor: "#004048",
+        borderTopColor: "#004048",
         backgroundColor: "white",
         alignContent: 'center',
+        alignItems: 'center',
         padding: 8,
     },
     savingButtonText:{
@@ -558,14 +582,20 @@ const styles=StyleSheet.create({
     },
     itemsBlock: {
         flex:1,
-        marginTop: 3, 
+        marginTop: 3,
+        marginBottom: 3, 
+        borderBottomWidth: 2,
+        borderTopWidth: 2,
+        borderBottomColor: "#003840",
+        borderTopColor: "#003840",
         flexDirection: "row",
-        justifyContent: "space-evenly"
+        justifyContent: "space-evenly",
+        backgroundColor: 'white',
+
     },
     measuresItemView: {
         backgroundColor: "white",
         flex:1,
-        borderWidth: 2,
         justifyContent: 'center',
         margin: 1,
     },
@@ -574,7 +604,6 @@ const styles=StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         alignContent: 'center',
-        borderWidth: 2,
         justifyContent: 'center',
         margin: 1,
     },

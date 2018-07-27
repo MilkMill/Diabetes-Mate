@@ -6,7 +6,7 @@ import {
     ScrollView
      } from 'react-native';
 
-import Header from './src/components/Header/Header';
+import Header from './src/components/Header';
 import HomeComponent from './src/components/Home';
 
 

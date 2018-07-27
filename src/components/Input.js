@@ -197,8 +197,8 @@ class HomeInput extends Component{
     onAddNote = (prevState) => {
         const newNote = {};
         this.state.glucoseInput ? newNote.glucose = this.state.glucoseInput : newNote.glucose = null;
-        newNote.bu = this.state.buInput;
-        newNote.insulin = this.state.insulinInput;
+        this.state.buInput ? newNote.bu = this.state.buInput : newNote.bu = null;
+        this.state.insulinInput ? newNote.insulin = this.state.insulinInput : newNote.insulin = null;
         newNote.date = this.state.dateInput;
         newNote.time = this.state.timeInput;
         newNote.canDateUpdate = this.state.canDateUpdate;
@@ -466,8 +466,7 @@ class HomeInput extends Component{
                         <TouchableOpacity
                             onLongPress ={()=> this.deleteNote(i)}
                             key={i}
-                            style={styles.listItem}
-                        >
+                            style={styles.listItem}>
                             <View style={styles.itemsBlock}>
 
                                 <View style={styles.measuresItemView}>
@@ -476,11 +475,11 @@ class HomeInput extends Component{
                                 </Text>
 
                                 <Text style={styles.item}>
-                                ХЕ: {item.bu}
+                                {item.bu == null || item.bu == '1.0' ? '' : 'ХЕ: ' + item.bu}
                                 </Text>
 
                                 <Text style={styles.item}>
-                                Инсулин: {item.insulin}
+                                {item.insulin == null || item.insulin == '1.0' ? '' : 'Инсулин: ' + item.insulin}
                                 </Text>
                                 </View>
 

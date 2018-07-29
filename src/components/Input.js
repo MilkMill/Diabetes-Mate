@@ -5,10 +5,11 @@ import {
     View,
     TextInput,
     TouchableOpacity,
-    Slider,
     Image,
-    ImageBackground
+    ImageBackground,
+    Slider
     } from 'react-native';
+
 
     import LogBookComponent from './LogBook';
     import DiagramsComponent from './Diagrams';
@@ -20,8 +21,6 @@ class HomeInput extends Component{
         super();
         this.state = {
             glucoseInput: '',
-            minGlucValue: 0,
-            maxGlucValue : 20,
             glucoseSlide: null,
             buInput: '',
             buSlide: null,
@@ -31,7 +30,9 @@ class HomeInput extends Component{
             dayInput: '',
             canDateUpdate: true,
             dates: [],
+
             timeInput: '',
+
             id: '',
             latest: [
                 {   
@@ -363,7 +364,7 @@ class HomeInput extends Component{
             <View style={styles.globalView}>
 
                 <View style={styles.modalsView}>
-                    <LogBookComponent notes={this.state.notes}/>
+                    <LogBookComponent log={this.state.notes} dayInput={this.state.dayInput}/>
                     <DiagramsComponent />
                     <AnalyticsComponent />
                 </View>

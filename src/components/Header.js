@@ -5,6 +5,7 @@ import {
     View,
     ImageBackground
      } from 'react-native';
+
     
 import Vegetales from '../assets/Vegetales.jpg'
 
@@ -20,7 +21,7 @@ const Header = () => {
                     </Text>
                     </ImageBackground>
                 </View>
-                
+ 
                 <View style={styles.border}/>
              </View>
         
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     border:{
-        borderBottomWidth: 1,
+        borderBottomWidth: 0,
         borderBottomColor: "black",
         marginBottom: 0,
         marginLeft: 10,

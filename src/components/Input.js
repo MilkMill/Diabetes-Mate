@@ -14,7 +14,6 @@ import {
     import LogBookComponent from './LogBook';
     import DiagramsComponent from './Diagrams';
     import AnalyticsComponent from './Analytics';
-    import Planet from '../assets/Vegetales.jpg';
 
 class HomeInput extends Component{
     constructor(){
@@ -22,6 +21,7 @@ class HomeInput extends Component{
         this.state = {
             glucoseInput: '',
             glucoseSlide: null,
+            glucose: [],
             buInput: '',
             buSlide: null,
             insulinInput: '',
@@ -214,6 +214,7 @@ class HomeInput extends Component{
               return {
                 notes: [newNote, ...prevState.notes],
                 latest: [newNote, ...prevState.latest],
+                glucose: [this.state.glucoseInput, ...prevState.glucose],
                 glucoseInput: '',
                 glucoseSlide: null,
                 buInput: '',
@@ -365,7 +366,7 @@ class HomeInput extends Component{
 
                 <View style={styles.modalsView}>
                     <LogBookComponent log={this.state.notes} dayInput={this.state.dayInput}/>
-                    <DiagramsComponent />
+                    <DiagramsComponent glucose={this.state.glucose}/>
                     <AnalyticsComponent />
                 </View>
                 

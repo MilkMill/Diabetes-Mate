@@ -7,16 +7,26 @@ import {
     Modal,
     TouchableOpacity
 } from 'react-native';
+import { AreaChart, Grid } from 'react-native-svg-charts'
+import * as shape from 'd3-shape'
+
 
 class DiagramsComponent extends Component {
     state = {
         modal: false,
+        glucose: this.props.glucose, 
     }
 
     handleModal = () => {
-        alert("Здесь ничего нет")
+        this.setState({
+            modal: !this.state.modal ? true : false,
+            glucose: this.props.glucose
+        })
     }
     render() {
+
+
+
         return(
             <View style={styles.modalView}>
                 <TouchableOpacity 
@@ -44,6 +54,15 @@ class DiagramsComponent extends Component {
                         title='Back to Inputs'
                         onPress={this.handleModal}
                         />
+                    <AreaChart
+                    style={{ height: 200 }}
+                    data={ this.props.glucose }
+                    contentInset={{ top: 30, bottom: 30 }}
+                    curve={ shape.curveNatural }
+                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
+                      >
+                <Grid/>
+            </AreaChart>
                 </Modal>
             
             </View>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { 
     StyleSheet,
     Text,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     border:{
-        borderBottomWidth: 0,
+        borderBottomWidth: 3,
         borderBottomColor: "black",
         marginBottom: 0,
         marginLeft: 10,

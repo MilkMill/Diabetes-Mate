@@ -1,37 +1,29 @@
-import React, { Component } from 'react';
-import { 
-    StyleSheet,
-    Text,
-    View,
-    ScrollView
-     } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Provider } from 'react-redux';
+import  store from './src/store';
 
-import Header from './src/components/Header';
-import HomeComponent from './src/components/Home';
+import AppContainer from './src/containers/AppContainer';
 
 
-class App extends Component {
-  render(){
-    return(
-      <ScrollView>
-      <View style={styles.appView}>
-        
-        <Header />
-  
-        <HomeComponent />
-        
+export default class App extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <View styles={styles.containerView}>
+          <AppContainer/>
         </View>
-        </ScrollView>
-
-    )
+      </Provider>
+    );
   }
-
-};
+}
 
 const styles = StyleSheet.create({
-  appView: {
-    backgroundColor: "#087078"
-  }
-})
+  containerView: {
 
-export default App;
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+  },
+});

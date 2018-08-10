@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { 
     StyleSheet,
     Text,
@@ -38,28 +38,22 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
     },
     headerImage: {
-        marginTop: 0,
-        marginBottom: 0,
-        borderWidth: 0,
-        borderColor: "#004048",
-        borderRadius: 50,
-        backgroundColor: "white",
+        padding: 10,
+        width: '100%',
         alignContent: 'center',
         alignItems: 'center',
-        padding: 10,
-        width: '100%'
+        backgroundColor: "white",
     },
     headerText: {
-        fontSize: 30,
         marginTop: 10,
+        fontSize: 30,
         fontWeight: 'bold',
     },
     border:{
-        borderBottomWidth: 0,
-        borderBottomColor: "black",
-        marginBottom: 0,
         marginLeft: 10,
-        marginRight: 10,
+        marginRight: 10,        
+        borderBottomWidth: 3,
+        borderBottomColor: "black",
     },
 })
 

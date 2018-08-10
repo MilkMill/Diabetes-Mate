@@ -1,23 +1,50 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity , Button, Modal} from 'react-native';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import * as addActions from "../actions/add";
+import * as modalActions from "../actions/modal";
+
+import ListItemRewrite from "./ListItemRewrite";
 
 class ListItem extends Component {
 
+  handleModalOpen = () => {
+    this.props.actions.boolean_modal(this.props.modal);
+    this.props.actions.remember_values_that_index(this.props.notes, this.props.index);
+    if(this.props.modal) {
+      this.timerIdModal = setTimeout(() => {
+        this.props.actions.boolean_modal(true)
+      }, 10000);
+    }
+  }
+
+  handleModalClose = () => {
+    this.props.actions.boolean_modal(this.props.modal);
+  }
+
+ /*  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.index == this.props.selected[0] ||
+    this.props.index == nextProps.selected[0];
+ }
+ */
   render() {
     const { 
+        notes,
         index,
         glucose,
         breadUnits,
         insulin,
         date,
-        time
+        time,
+        modal,
+        glucoseSelected
     } = this.props;
+
     return (
+      <View>
         <TouchableOpacity
-        
+        onLongPress={this.handleModalOpen}
         key={index}
         >
         <View style={styles.itemView}>
@@ -96,14 +123,32 @@ class ListItem extends Component {
         </View>
 
       </TouchableOpacity>
+
+      <Modal
+      visible={modal}
+      animationType={'fade'}
+      onRequestClose={this.handleModalClose}>
+
+      <ListItemRewrite />
+
+ <Text>{glucoseSelected}</Text>
+        <Button
+        title='Close modal'
+        onPress={this.handleModalClose}
+        />
+
+      </Modal>      
+      </View>
+
     );
   }
 }
 
-const styles = StyleSheet.create( {
-    default: {
+const mapDispatchToProps = dispatch => {
+  return { actions: bindActionCreators(modalActions, dispatch)};
+};
 
-    },
+const styles = StyleSheet.create({
     itemView: {
       padding: 5,
       borderBottomWidth: 1,
@@ -141,4 +186,4 @@ const styles = StyleSheet.create( {
 
 
   
-  export default ListItem;
+  export default connect(null, mapDispatchToProps)(ListItem);

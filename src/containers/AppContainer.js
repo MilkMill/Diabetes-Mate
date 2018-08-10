@@ -11,13 +11,14 @@ import Header from '../components/Header';
 class App extends Component {
   render() {
     const { notes, glucose, breadUnits, insulin, date, time } = this.props;
+    const { modal, glucoseSelected } = this.props;
     return (
       <View>
 
         <Header/>
         <NoteAddingBlock glucose={glucose} breadUnits={breadUnits} insulin={insulin} date={date} time={time}/>
         <ScrollView>
-        <List notes={notes}/>
+        <List notes={notes} modal={modal} glucoseSelected={glucoseSelected}/>
         </ScrollView>
         
        
@@ -34,6 +35,8 @@ const mapStateToProps = state => {
     insulin: state.add.insulinInput,
     date: state.add.dateInput,
     time: state.add.timeInput,
+    modal: state.modal.modal,
+    glucoseSelected: state.modal.glucoseSelected,
   };
 };
 

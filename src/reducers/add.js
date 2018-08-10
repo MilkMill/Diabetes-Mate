@@ -86,6 +86,12 @@ const initialState = {
             timeInput: action.payload.number
         }
       }
+      
+      case "DELETE_NOTE": {
+        return {...state,
+          notes: [ state.notes.slice().splice(action.payload, 1), ...state.notes,]
+        }
+      }
       default:
         return state;
     }

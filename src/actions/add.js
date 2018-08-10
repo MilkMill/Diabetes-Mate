@@ -55,6 +55,13 @@ const make_empty = () => {
         }
     }
 }
+
+const delete_note = (index) => {
+  return {
+    type: "DELETE_NOTE",
+    payload: index
+  }
+}
   
-export { add_glucose, add_breadUnits, add_insulin, add_date, add_time, make_note, make_empty };
+export { add_glucose, add_breadUnits, add_insulin, add_date, add_time, make_note, make_empty, delete_note };
   

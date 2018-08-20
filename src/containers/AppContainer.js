@@ -13,7 +13,7 @@ class App extends Component {
     const { notes, glucose, breadUnits, insulin, date, time } = this.props;
     const { modal, glucoseSelected } = this.props;
     return (
-      <View>
+      <ScrollView>
 
         <Header/>
         <NoteAddingBlock glucose={glucose} breadUnits={breadUnits} insulin={insulin} date={date} time={time}/>
@@ -22,7 +22,7 @@ class App extends Component {
         </ScrollView>
         
        
-      </View>
+      </ScrollView>
     );
   }
 }

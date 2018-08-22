@@ -6,5 +6,6 @@
 
 ### в приложении реализованы компоненты:
 #### Slider,
-#### ImageBackground
-
+#### ImageBackground,
+#### Redux,
+#### 

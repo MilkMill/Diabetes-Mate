@@ -1,30 +1,47 @@
 import React, { Component } from 'react';
-import { View, TextInput, Slider, StyleSheet } from 'react-native';
+import { View, TextInput, Slider, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import DatePicker from 'react-native-datepicker'
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import * as addActions from "../actions/add";
+import * as listActions from "../actions/list";
+
 import { debounce } from 'lodash';
 
 class Measures extends Component {
     constructor(props){
         super(props);
+        /* debounce для сглаживания лагов при движении слайдера */
         this.debounceUpdateGluc = debounce(this.onGlucSliding, 50);
         this.debounceUpdateBU = debounce(this.onBUSliding, 50);
         this.debounceUpdateIns = debounce(this.onInsSliding, 50);
     }
 
+componentWillMount(){
+    this.calculateDate();
+    this.calculateTime();
+    this.calculateDateMS();
+
+}
+
+componentDidUpdate(){
+    this.calculateDate();
+    this.calculateTime();
+    this.calculateDateMS();
+
+}
+
   /* SAVE INPUTS TO STORE */
 
   /* glucose */
-  onWritingGlucose = (glucose) => {
-    this.props.actions.add_glucose(glucose);
+  onWritingGlucose = (glucoseInput) => {
+    this.props.actions.add_glucose(glucoseInput);
 
 
   }
-  onGlucSliding = (value) => {
-    let decimal = Math.round((value%1)*10);
-    let natural = value - value % 1;
+  onGlucSliding = (glucoseInput) => {
+    let decimal = Math.round((glucoseInput%1)*10);
+    let natural = glucoseInput - glucoseInput % 1;
     if (decimal == 10){
         decimal = 0;
         natural += 1;
@@ -35,8 +52,8 @@ class Measures extends Component {
 }
 
   /* bread units */
-  onWritingBreadUnits = (breadUnits) => {
-    this.props.actions.add_breadUnits(breadUnits)
+  onWritingBreadUnits = (breadUnitsInput) => {
+    this.props.actions.add_breadUnits(breadUnitsInput)
   }
   onBUSliding = (value) => {
     let decimal = Math.round((value%1)*10);
@@ -50,12 +67,14 @@ class Measures extends Component {
 }
 
   /* insulin */
-  onWritingInsulin = (insulin) => {
-    this.props.actions.add_insulin(insulin)
+
+  onWritingInsulin = (insulinInput) => {
+    this.props.actions.add_insulin(insulinInput)
   }
-  onInsSliding = (value) => {
-    let decimal = Math.round((value%1)*10);
-    let natural = value - value % 1;
+
+  onInsSliding = (insulinInput) => {
+    let decimal = Math.round((insulinInput%1)*10);
+    let natural = insulinInput - insulinInput % 1;
     if (decimal == 10){
         decimal = 0;
         natural += 1;
@@ -64,46 +83,62 @@ class Measures extends Component {
     this.props.actions.add_insulin(result);
 }
 
-  /* DATE_AND_TIME */
+    /* DATE_AND_TIME */
     onEndEditingOfAllOwn = () => {
         this.calculateDate();
         this.calculateTime();
+        this.calculateDateMS();
     }
 
-  /* date */
+    /* date */
+    onDateValueChange = (value) => {
+        value ? this.props.actions.add_date_from_calendar(value) 
+        : this.props.actions.add_date_from_calendar(this.props.dateInput)
+    }
+
+    onTimeValueChange = (value) => {
+        value ? this.props.actions.add_time_from_calendar(value) 
+        : this.props.actions.add_time_from_calendar(this.props.timeInput)
+    }
+
+
   calculateDate = () => {
+
     let global = new Date()
   
     let day = global.getDate();
     for ( let i = 0; i < 10; i++){
         if (day == i) day = '0' + i;
     }
-
-    let weekDay = global.getDay() + 1;
-        switch(weekDay) {
-            case 1: weekDay = 'Понедельник';
-            break;
-            case 2: weekDay = 'Вторник';
-            break;
-            case 3: weekDay = 'Среда';
-            break;
-            case 4: weekDay = 'Четверг';
-            break;
-            case 5: weekDay = 'Пятница';
-            break;
-            case 6: weekDay = 'Суббота';
-            break;
-            case 7: weekDay = 'Воскресенье';
-            break;
-        }
-
         let month = global.getMonth() + 1;
-        for ( let i = 0; i < 10; i++){
-            if (month == i) month = '0' + i;
+        switch(month){
+            case 1: month = 'Jan';
+            break;
+            case 2: month = 'Feb';
+            break;
+            case 3: month = 'Mar';
+            break;
+            case 4: month = 'Apr';
+            break;
+            case 5: month = 'May';
+            break;
+            case 6: month = 'Jun';
+            break;
+            case 7: month = 'Jul';
+            break;
+            case 8: month = 'Aug';
+            break;
+            case 9: month = 'Sep';
+            break;
+            case 10: month = 'Oct';
+            break;
+            case 11: month = 'Nov';
+            break;
+            case 12: month = 'Dec';
+            break;
         }
   
         let year = global.getFullYear().toString();
-        year = year.charAt(2) + year.charAt(3);
   
         let hours = global.getHours();
         for ( let i = 0; i < 10; i++){
@@ -113,8 +148,9 @@ class Measures extends Component {
         for ( let i = 0; i < 10; i++){
             if (minutes == i) minutes = '0' + i;
         }
-        let dateInput = day + '.' + month + '.' + year + ', ' + weekDay;
-        this.props.actions.add_date(dateInput);
+        let dateInput = month + '-' + day + '-' + year;
+
+     this.props.actions.add_date(dateInput);
     }
 
     /* time */  
@@ -132,10 +168,85 @@ class Measures extends Component {
         this.props.actions.add_time(timeInput);
     }
 
+    /* date miliseconds */
+
+    calculateDateMS = () => {
+        let datePicked = '';
+        if(this.props.datePicked === '') {datePicked = this.props.dateInput}
+        else {datePicked = this.props.datePicked};
+    
+        let timePicked = '';
+        if(this.props.timePicked === '') {timePicked = this.props.timeInput}
+        else {timePicked = this.props.timePicked}
+    
+        let dateMS = Date.parse(datePicked + ' ' + timePicked)
+        if (datePicked==='' && timePicked==='') dateMS = this.props.dateMS;
+    
+        this.props.actions.add_dateMS(dateMS);
+    }
+
   render(){
-    const { glucose, breadUnits, insulin } = this.props
+
+    const { 
+        glucoseInput, 
+        breadUnitsInput, 
+        insulinInput,
+        datePicked,
+        timePicked
+    } = this.props
+
       return(
         <View style={styles.globalView}>
+
+            {/* INPUTS_BLOCK */}
+
+            {/* DATE_AND_TIME_PICKER_BLOCK */}
+            <View>
+                <DatePicker
+                    style={{width: 200, borderWidth: 0}}
+                    date={datePicked ? datePicked : this.props.dateInput}
+                    mode="date"
+                    androidMode="default"
+                    placeholder="select date"
+                    format="MMM DD, YYYY"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    customStyles={{
+                        dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 0
+                        },
+                        dateInput: {
+                            marginLeft: 36,
+                        }
+                    }}
+                    onDateChange={this.onDateValueChange}
+                />
+
+                <DatePicker
+                    style={{width: 200, borderWidth: 0}}
+                    date={timePicked ? timePicked : this.props.timeInput}
+                    mode="time"
+                    androidMode="default"
+                    placeholder="select time"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    customStyles={{
+                        dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 0
+                        },
+                        dateInput: {
+                            marginLeft: 36,
+                        }
+                    }}
+                    onDateChange={this.onTimeValueChange}
+                />
+            </View>
 
             {/* GLUCOSE_BLOCK */}
             <View style={styles.sliderIncludedInput}>
@@ -145,7 +256,7 @@ class Measures extends Component {
                     style={styles.slider}
                     minimumValue={1}
                     maximumValue={12}
-                    value={+glucose}
+                    value={+glucoseInput}
                     onValueChange={value => this.debounceUpdateGluc(value)}
                     minimumTrackTintColor="red"
                     onSlidingComplete={this.onEndEditingOfAllOwn}
@@ -154,24 +265,24 @@ class Measures extends Component {
 
                 <TextInput 
                 style={styles.measureInput}
-                value={glucose}
+                value={glucoseInput.toString()}
                 onChangeText={this.onWritingGlucose}
                 onEndEditing={this.onEndEditingOfAllOwn}
+                keyboardType="numeric"
                 placeholder="Сахар"
                 textAlign="center"/>
 
             </View>
           
-
-            {/* BREAD_UNITS_BLOCK */}
+            {/* BREAD_UNITS_BLOCK BU BRUN*/}
             <View style={styles.sliderIncludedInput}>
 
                 <View style={styles.sliderView}>
                     <Slider 
                     style={styles.slider}
-                    minimumValue={1}
+                    minimumValue={0}
                     maximumValue={10}
-                    value={+breadUnits}
+                    value={+breadUnitsInput}
                     onValueChange={value => this.debounceUpdateBU(value)}
                     minimumTrackTintColor="green"
                     onSlidingComplete={this.onEndEditingOfAllOwn}
@@ -180,23 +291,24 @@ class Measures extends Component {
 
                 <TextInput 
                 style={styles.measureInput}
-                value={breadUnits}
+                value={breadUnitsInput}
                 onChangeText={this.onWritingBreadUnits}
                 onEndEditing={this.onEndEditingOfAllOwn}
+                keyboardType="numeric"
                 placeholder="ХЕ"
                 textAlign="center"/>
 
             </View>
 
-        {/* INSULIN_BLOCK */}
+        {/* INSULIN_BLOCK INS INSUL */}
             <View style={styles.sliderIncludedInput}>
 
                 <View style={styles.sliderView}>
                     <Slider 
                     style={styles.slider}
-                    minimumValue={1}
+                    minimumValue={0}
                     maximumValue={12}
-                    value={+insulin}
+                    value={+insulinInput}
                     onValueChange={value => this.debounceUpdateIns(value)}
                     minimumTrackTintColor="blue"
                     onSlidingComplete={this.onEndEditingOfAllOwn}
@@ -205,9 +317,10 @@ class Measures extends Component {
 
                 <TextInput 
                 style={styles.measureInput}
-                value={insulin}
+                value={insulinInput.toString()}
                 onChangeText={this.onWritingInsulin}
                 onEndEditing={this.onEndEditingOfAllOwn}
+                keyboardType="numeric"
                 placeholder="Инсулин"
                 textAlign="center"/>
 
@@ -218,7 +331,7 @@ class Measures extends Component {
 }
   
   const mapDispatchToProps = dispatch => {
-    return { actions: bindActionCreators(addActions, dispatch) };
+    return { actions: bindActionCreators(listActions, dispatch) };
   };
 
 const styles = StyleSheet.create( {

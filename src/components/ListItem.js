@@ -3,24 +3,21 @@ import { View, StyleSheet, Text, TouchableOpacity , Button, Modal} from 'react-n
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import * as modalActions from "../actions/modal";
+import * as listActions from "../actions/list";
 
-import ListItemRewrite from "./ListItemRewrite";
+import ListItemRewrite from "../containers/ListItemRewrite";
 
 class ListItem extends Component {
 
   handleModalOpen = () => {
     this.props.actions.boolean_modal(this.props.modal);
     this.props.actions.remember_values_that_index(this.props.notes, this.props.index);
-    if(this.props.modal) {
-      this.timerIdModal = setTimeout(() => {
-        this.props.actions.boolean_modal(true)
-      }, 10000);
-    }
   }
 
   handleModalClose = () => {
     this.props.actions.boolean_modal(this.props.modal);
+    this.props.actions.sort_notes();
+    this.props.actions.make_empty_again();
   }
 
  /*  shouldComponentUpdate(nextProps, nextState) {
@@ -38,7 +35,8 @@ class ListItem extends Component {
         date,
         time,
         modal,
-        glucoseSelected
+        glucoseSelected,
+        indexSelected
     } = this.props;
 
     return (
@@ -125,17 +123,13 @@ class ListItem extends Component {
       </TouchableOpacity>
 
       <Modal
-      visible={modal}
-      animationType={'fade'}
-      onRequestClose={this.handleModalClose}>
+        visible={modal}
+        animationType={'fade'}
+        onRequestClose={this.handleModalClose}>
 
-      <ListItemRewrite />
-
- <Text>{glucoseSelected}</Text>
-        <Button
-        title='Close modal'
-        onPress={this.handleModalClose}
-        />
+      <ListItemRewrite 
+        indexSelected={indexSelected} 
+        modal={modal} />
 
       </Modal>      
       </View>
@@ -145,7 +139,7 @@ class ListItem extends Component {
 }
 
 const mapDispatchToProps = dispatch => {
-  return { actions: bindActionCreators(modalActions, dispatch)};
+  return { actions: bindActionCreators(listActions, dispatch)};
 };
 
 const styles = StyleSheet.create({

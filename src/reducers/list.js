@@ -8,7 +8,7 @@ const initialState = {
       glucose: 5.5,
       breadUnits: 2,
       insulin: 3,
-      date: '05.05.18, Среда',
+      date: 'May 05,2018',
       time: '12:30',
       dateMS: 1535366118807
     },
@@ -16,7 +16,7 @@ const initialState = {
       glucose: 3.5,
       breadUnits: 2,
       insulin: 0,
-      date: '15.06.18, Четверг',
+      date: 'Feb 06,2018',
       time: '12:00',
       dateMS: 1535366118810
     },
@@ -24,7 +24,7 @@ const initialState = {
       glucose: 5.9,
       breadUnits: 0,
       insulin: 1,
-      date: '07.05.18, Среда',
+      date: 'Mar 25, 2018',
       time: '00:30',
       dateMS: 1535366118809
     },
@@ -32,10 +32,10 @@ const initialState = {
       glucose: 0,
       breadUnits: 0,
       insulin: 1,
-      date: '07.05.18, Среда',
+      date: 'Jun 02, 2018',
       time: '00:00',
       dateMS: 1535366118808
-    }, */
+    },  */
   ],
     selected: [],
     modal: false,

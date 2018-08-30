@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Slider, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet} from 'react-native';
 import DatePicker from 'react-native-datepicker'
 
 import { connect } from 'react-redux';

@@ -20,11 +20,6 @@ class ListItem extends Component {
     this.props.actions.make_empty_again();
   }
 
- /*  shouldComponentUpdate(nextProps, nextState) {
-    return this.props.index == this.props.selected[0] ||
-    this.props.index == nextProps.selected[0];
- }
- */
   render() {
     const { 
         notes,

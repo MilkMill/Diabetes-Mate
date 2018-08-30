@@ -43,6 +43,8 @@ class ListItemRewrite extends Component {
         <View style={{height: 0, backgroundColor: "black"}}></View>
 
         <Measures 
+          dateInput={dateInput}
+          timeInput={timeInput}
           datePicked={datePicked === '' ? notes[indexSelected].date : datePicked}
           timePicked={timePicked === '' ? notes[indexSelected].time : timePicked}
           glucoseInput={glucoseInput === '' ? notes[indexSelected].glucose : glucoseInput}

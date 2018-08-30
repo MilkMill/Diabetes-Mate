@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { View, TextInput, Slider, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import DatePicker from 'react-native-datepicker'
 
-import MeasureBlock from './MeasureBlock'
-
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as listActions from "../actions/list";
-import DateBlock from './DateBlock';
 
-class Measures extends Component {
+class DateBlock extends Component {
 
 componentWillMount(){
     this.calculateDate();
@@ -24,12 +21,6 @@ componentDidUpdate(){
 }
 
     /* DATE_AND_TIME */
-    onEndEditingOfAllOwn = () => {
-        this.calculateDate();
-        this.calculateTime();
-        this.calculateDateMS();
-    }
-
     /* date */
     onDateValueChange = (value) => {
         value ? this.props.actions.add_date_from_calendar(value) 
@@ -127,52 +118,57 @@ componentDidUpdate(){
   render(){
 
     const { 
-        glucoseInput, 
-        breadUnitsInput, 
-        insulinInput,
         datePicked,
         timePicked
     } = this.props
 
       return(
-        <View style={styles.globalView}>
+            <View style={styles.pickers}>
+                <DatePicker
+                    style={styles.datePicker}
+                    date={datePicked ? datePicked : this.props.dateInput}
+                    mode="date"
+                    androidMode="default"
+                    placeholder="select date"
+                    format="MMM DD, YYYY"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    iconSource={null}
+                    customStyles={{
+                        dateInput: {
+                            margin: 0,
+                            borderWidth: 2,
+                            borderRadius: 50,
+                        },
+                        dateText: {
+                            fontSize: 20,
+                        }
+                    }}
+                    onDateChange={this.onDateValueChange}
+                />
 
-            <Text style={styles.noticeText}>
-              {
-                this.props.glucoseInput.toString().trim() === '' &&
-                this.props.breadUnitsInput.toString().trim() === '' &&
-                this.props.insulinInput.toString().trim() === ''
-                ?
-                'Enter values or slide the dot' : 'Click the button to save parameters'
-              }
-            </Text>
-
-            {/* INPUTS_BLOCK */}
-
-            <DateBlock timeInput={this.props.timeInput} dateInput={this.props.dateInput} />
-
-            {/* GLUCOSE_BLOCK */}
-            <MeasureBlock 
-            inputValue={glucoseInput}
-            glucose={true}
-            placeholderName="Сахар"
-            />
-          
-            {/* BREAD_UNITS_BLOCK BU BRUN*/}
-            <MeasureBlock 
-            inputValue={breadUnitsInput}
-            breadUnits={true}
-            placeholderName="ХЕ"
-            />
-
-            {/* INSULIN_BLOCK INS INSUL */}
-            <MeasureBlock 
-            inputValue={insulinInput}
-            insulin={true}
-            placeholderName="Инсулин"
-            />
-
-        </View>
+                <DatePicker
+                    style={styles.timePicker}
+                    date={timePicked ? timePicked : this.props.timeInput}
+                    mode="time"
+                    androidMode="default"
+                    placeholder="select time"
+                    confirmBtnText="Confirm"
+                    cancelBtnText="Cancel"
+                    iconSource={null}
+                    customStyles={{
+                        dateInput: {
+                           margin: 30,
+                           borderWidth: 2,
+                           borderRadius: 50,
+                        },
+                        dateText: {
+                            fontSize: 20,
+                        }
+                    }}
+                    onDateChange={this.onTimeValueChange}
+                />
+            </View>
       )
   }
 }
@@ -184,11 +180,56 @@ componentDidUpdate(){
 const styles = StyleSheet.create( {
 globalView: {
     width: '100%',
-},  
+},    noticeText: {
+    fontSize: 20,
+    color: "silver"
+},
     noticeText: {
         fontSize: 20,
         color: "silver"
     },
+    pickers:{
+        flexDirection: 'row',
+        justifyContent:'space-between',
+        marginTop: 20,
+        marginBottom: 15,
+        marginLeft: 10
+    },
+        datePicker: {
+            
+            marginLeft: 20
+        },
+        timePicker: {
+            marginRight: 140,
+        },
+    sliderIncludedInput: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginBottom: 10
+    },
+        measureInput: {
+            alignItems: 'center',
+            padding: 10,
+            marginTop: 10,
+            fontSize: 18,
+            fontWeight: '100',
+            width: "20%",
+        },
+        sliderView: {
+            marginTop: 10,
+            marginBottom: 0,
+            borderWidth: 2,
+            borderColor: "#003840",
+            borderRadius: 50,
+            backgroundColor: "white",
+            alignContent: 'center',
+            padding: 10,
+            width: '70%'
+        },
+            slider:{
+                width:'100%',
+                padding: 5,
+            },
 });
 
-export default connect(null, mapDispatchToProps)(Measures);
+export default connect(null, mapDispatchToProps)(DateBlock);

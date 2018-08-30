@@ -21,7 +21,6 @@ componentWillMount(){
       indexSelected } = this.props;
     return (
         <View>
-            <View style={{borderTopWidth:1}} />
 
             { notes.map((item, index) => (
               <ListItem 

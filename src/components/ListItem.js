@@ -146,9 +146,11 @@ const styles = StyleSheet.create({
     itemView: {
       padding: 5,
       borderBottomWidth: 1,
+      borderTopWidth: 1,
       flexDirection: "row",
       justifyContent: "space-evenly",
       backgroundColor: 'white',
+      borderColor: 'gray',
     },
         measuresItemsView: {
          /*  backgroundColor: "#ccecce", */

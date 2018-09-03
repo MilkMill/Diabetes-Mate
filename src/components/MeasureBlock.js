@@ -7,7 +7,7 @@ import * as listActions from "../actions/list";
 
 import { debounce } from 'lodash';
 
-class Measures extends Component {
+class MeasureBlock extends Component {
     constructor(props){
         super(props);
         /* debounce для сглаживания лагов при движении слайдера */
@@ -55,17 +55,22 @@ class Measures extends Component {
                     onValueChange={value => this.debounceUpdate(value)}
                     minimumTrackTintColor="blue"
                     onSlidingComplete={value => this.debounceUpdate(value)}
-                    step={0.5}/> 
+                    step={
+                        this.props.glucose ? 0.1 :
+                        this.props.breadUnits ? 0.1 : 0.5
+                    }/> 
                 </View>
 
                 <TextInput 
                 style={styles.measureInput}
-                value={inputValue.toString()}
+                value={inputValue.toString() === 'hollow' ? '' : inputValue.toString()}
                 onChangeText={this.onWritingInput}
-                onEndEditing={this.onWritingInput}
                 keyboardType="numeric"
                 placeholder={this.props.placeholderName}
-                textAlign="center"/>
+                textAlign="center"
+                underlineColorAndroid="white"
+                
+                />
 
             </View>
 
@@ -111,4 +116,4 @@ globalView: {
             },
 });
 
-export default connect(null, mapDispatchToProps)(Measures);
+export default connect(null, mapDispatchToProps)(MeasureBlock);

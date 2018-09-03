@@ -37,7 +37,6 @@ const initialState = {
       dateMS: 1535366118808
     },  */
   ],
-    selected: [],
     modal: false,
     glucoseSelected: '',
     indexSelected: 0,
@@ -48,18 +47,34 @@ const initialState = {
   const add = (state = initialState, action) => {
     switch (action.type) {
       case "ADD_GLUCOSE": {
+        let glucose = '';
+        action.glucoseInput.toString() === '0' || 
+        action.glucoseInput.toString() === '0.0' ||
+        action.glucoseInput.toString() === '.0' ? glucose = "hollow" : 
+        glucose = action.glucoseInput;
+        
         return {...state, 
-            glucoseInput: action.glucoseInput
+            glucoseInput: glucose,
         }
       }
       case "ADD_BREADUNITS": {
+        let breadUnits = '';
+        action.breadUnitsInput.toString() === '0' || 
+        action.breadUnitsInput.toString() === '0.0' ||
+        action.breadUnitsInput.toString() === '.0' ? breadUnits = 'hollow' : 
+        breadUnits = action.breadUnitsInput;
         return {...state,
-            breadUnitsInput: action.breadUnitsInput
+            breadUnitsInput: breadUnits
         };
       }
       case "ADD_INSULIN": {
+        let insulin = '';
+        action.insulinInput.toString() === '0' || 
+        action.insulinInput.toString() === '0.0' ||
+        action.insulinInput.toString() === '.0' ? insulin = 'hollow' : 
+        insulin = action.insulinInput;
         return {...state,
-            insulinInput: action.insulinInput
+            insulinInput: insulin
         };
       }
 
@@ -94,6 +109,7 @@ const initialState = {
       }
 
       case "MAKE_NOTE": {
+        
         return {...state, 
             notes:[{ 
                 glucose: action.payload.glucose,
@@ -125,7 +141,6 @@ const initialState = {
       };
       case "REMEMBER_VALUES_THAT_INDEX": {
         return {...state,
-        glucoseSelected: action.payload.glucose,
         indexSelected: action.payload.index,
         }
       }

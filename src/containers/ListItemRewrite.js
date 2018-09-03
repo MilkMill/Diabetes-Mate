@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity , Button, Modal} from 'react-native';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as listActions from "../actions/list";
@@ -22,7 +24,7 @@ class ListItemRewrite extends Component {
   }
 
   render() {
-    const { 
+    const {
         notes, 
         glucoseInput, 
         breadUnitsInput, 
@@ -45,12 +47,13 @@ class ListItemRewrite extends Component {
         <Measures 
           dateInput={dateInput}
           timeInput={timeInput}
+          dateMS={dateMS === '' ? notes[indexSelected].dateMS : dateMS}
           datePicked={datePicked === '' ? notes[indexSelected].date : datePicked}
           timePicked={timePicked === '' ? notes[indexSelected].time : timePicked}
-          glucoseInput={glucoseInput === '' ? notes[indexSelected].glucose : glucoseInput}
-          breadUnitsInput={breadUnitsInput === '' ? notes[indexSelected].breadUnits : breadUnitsInput}
-          insulinInput={insulinInput === '' ? notes[indexSelected].insulin : insulinInput}
-          dateMS={dateMS === '' ? notes[indexSelected].dateMS : dateMS}
+
+          glucoseInput={glucoseInput === '' ? notes[indexSelected].glucose : glucoseInput === 'hollow' ? glucoseInput : glucoseInput }
+          breadUnitsInput={breadUnitsInput === '' ? notes[indexSelected].breadUnits : breadUnitsInput === 'hollow' ? breadUnitsInput : breadUnitsInput }
+          insulinInput={insulinInput === '' ? notes[indexSelected].insulin : insulinInput === 'hollow' ? insulinInput : insulinInput }
         />
 
         <AddingButton 
@@ -105,41 +108,17 @@ const mapStateToProps = state => {
   };
 };
 
-const styles = StyleSheet.create({
-    itemView: {
-      padding: 5,
-      borderBottomWidth: 1,
-      flexDirection: "row",
-      justifyContent: "space-evenly",
-      backgroundColor: 'white',
-    },
-        measuresItemsView: {
-         /*  backgroundColor: "#ccecce", */
-          flex: 1,
-          alignItems: 'flex-start',
-          alignContent: 'flex-start',
-          justifyContent: 'center',
-        },
-              measureItem: {
-                flexDirection: "row",
-                marginBottom: 1,
-              },
-                    measureItemTitle: {
-                      flex: 1,
-                    },
-                    measureItemValue: {
-                      flex: 1,
-                    },
-        dateItemsView: {
-          flex: 1,
-          alignItems: 'center',
-          alignContent: 'center',
-          justifyContent: 'center',
-        },
-                      noteText: {
-                        fontSize: 18,
-                      }
-  });
+ListItemRewrite.propTypes = {
+  notes: PropTypes.array,
+  glucoseInput: PropTypes.string,
+  breadUnitsInput: PropTypes.string,
+  insulinInput: PropTypes.string,
+  dateInput: PropTypes.string,
+  timeInput: PropTypes.string,
+  datePicked: PropTypes.string,
+  timePicked: PropTypes.string,
+  dateMS: PropTypes.number,
+}
 
 
   

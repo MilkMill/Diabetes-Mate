@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import List from "../components/List";
 import Header from '../components/Header';
@@ -68,11 +69,16 @@ const mapStateToProps = state => {
   };
 };
 
-
-const styles = StyleSheet.create({
-  appContainer: {
-    marginTop: 20,
-  }
-})
+App.propTypes = {
+  notes: PropTypes.array,
+  glucoseInput: PropTypes.string,
+  breadUnitsInput: PropTypes.string,
+  insulinInput: PropTypes.string,
+  dateInput: PropTypes.string,
+  timeInput: PropTypes.string,
+  datePicked: PropTypes.string,
+  timePicked: PropTypes.string,
+  dateMS: PropTypes.number,
+}
 
 export default connect(mapStateToProps, null)(App);

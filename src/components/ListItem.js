@@ -6,6 +6,7 @@ import { bindActionCreators } from "redux";
 import * as listActions from "../actions/list";
 
 import ListItemRewrite from "../containers/ListItemRewrite";
+import MeasuresItem from './MeasuresItem';
 
 class ListItem extends Component {
 
@@ -44,73 +45,26 @@ class ListItem extends Component {
 
           <View style={styles.measuresItemsView}>
 
-            <View style={styles.measureItem}>
-              {/* GLUCOSE */}
-              <View style={styles.measureItemTitle}>
-                {glucose !== undefined 
-                  && glucose !== '' 
-                  && glucose.toString() !== "0" 
-                  ? <Text style={styles.noteText}>Glucose: </Text> 
-                  :  <View></View>}
-              </View>
-
-              <View style={styles.measureItemValue}>
-                {glucose !== undefined 
-                  && glucose !== '' 
-                  && glucose.toString() !== "0" 
-                  ? <Text style={styles.noteText}>{glucose}</Text> 
-                  :  <View></View>}
-              </View>
-
-            </View>
+            <MeasuresItem
+              thing={glucose}
+              type="glucose"
+            />
                   
-            {/* BREAD_UNITS */}
-            <View style={styles.measureItem}>
+            <MeasuresItem
+              thing={breadUnits}
+              type="breadUnits"
+            />
+            
+            <MeasuresItem
+              thing={insulin}
+              type="insulin"
+            />
 
-              <View style={styles.measureItemTitle}>
-                {breadUnits !== undefined 
-                  && breadUnits !== '' 
-                  && breadUnits.toString() !== "0" 
-                  ? <Text style={styles.noteText}>Bread Units: </Text> 
-                  :  <View></View>}
-              </View>
-
-              <View style={styles.measureItemValue}>
-                {breadUnits !== undefined 
-                  && breadUnits !== '' 
-                  && breadUnits.toString() !== "0" 
-                  ? <Text style={styles.noteText}>{breadUnits}</Text> 
-                  :  <View></View>}
-              </View>
-
-            </View>
-
-            {/* INSULIN */}
-            <View style={styles.measureItem}>
-
-              <View style={styles.measureItemTitle}>
-                {insulin !== undefined 
-                  && insulin !== '' 
-                  && insulin.toString() !== "0" 
-                  ? <Text style={styles.noteText}>Insulin: </Text> 
-                  :  <View></View>}
-              </View>
-
-              <View style={styles.measureItemValue}>
-                {insulin !== undefined 
-                  && insulin !== '' 
-                  && insulin.toString() !== "0" 
-                  ? <Text style={styles.noteText}>{insulin}</Text> 
-                  :  <View></View>}
-              </View>
-
-            </View>
-
-          </View>  
+          </View>
 
           <View style={styles.dateItemsView}>
             <Text style={styles.noteText}>{date}</Text>
-            <Text >{time}</Text>
+            <Text style={styles.noteText}>{time}</Text>
           </View>  
           
         </View>

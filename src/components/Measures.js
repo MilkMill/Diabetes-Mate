@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Slider, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import MeasureBlock from './MeasureBlock'
 
@@ -27,7 +27,7 @@ class Measures extends Component {
                 this.props.breadUnitsInput.toString().trim() === '' &&
                 this.props.insulinInput.toString().trim() === ''
                 ?
-                'Enter values or slide the dot to set data' : 'Click the button to save parameters'
+                'Enter values or slide the dot to set data' : 'Click the button to save parameters '/*  ͡ ° ͜ʖ ͡ ° */
               }
             </Text>
 

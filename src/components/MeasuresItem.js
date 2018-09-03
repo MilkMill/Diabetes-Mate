@@ -7,7 +7,7 @@ import * as listActions from "../actions/list";
 
 import ListItemRewrite from "../containers/ListItemRewrite";
 
-class ListItem extends Component {
+class MeasuresItem extends Component {
 
   render() {
     const { 
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
 
 
   
-  export default connect(null, mapDispatchToProps)(ListItem);
+  export default connect(null, mapDispatchToProps)(MeasuresItem);

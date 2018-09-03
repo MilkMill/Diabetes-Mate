@@ -89,7 +89,7 @@ const remember_values_that_index = (notes, index) => {
   return {
       type: "REMEMBER_VALUES_THAT_INDEX",
       payload: {
-          glucose: notes[index].glucose,
+
           index: index
       }
   }

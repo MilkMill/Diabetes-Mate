@@ -13,14 +13,23 @@ class AddingButton extends Component {
     
     let modalLocal = this.props.modal;
     if ( modalLocal === true ) {
-      if(this.props.glucoseInput.toString().trim().length > 0 ||
-      this.props.breadUnitsInput.toString().trim().length > 0 ||
-      this.props.insulinInput.toString().trim().length > 0 ) {
+
+      let glucose = this.props.glucoseInput ;
+      let breadUnits = this.props.breadUnitsInput;
+      let insulin = this.props.insulinInput;
+
+      glucose === 'hollow' ? glucose = '' : glucose;
+      breadUnits === 'hollow' ? breadUnits = '' : breadUnits;
+      insulin === 'hollow' ? insulin = '' : insulin;
+
+      if(glucose.toString().trim().length > 0 ||
+      breadUnits.toString().trim().length > 0 ||
+      insulin.toString().trim().length > 0 ) {
         this.props.actions.delete_note(this.props.indexSelected);
         this.props.actions.make_note(
-            this.props.glucoseInput, 
-            this.props.breadUnitsInput, 
-            this.props.insulinInput,
+            glucose, 
+            breadUnits, 
+            insulin,
             this.props.datePicked,
             this.props.timePicked,
             this.props.dateMS,

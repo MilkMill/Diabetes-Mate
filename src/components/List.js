@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
@@ -17,8 +18,8 @@ componentWillMount(){
     const { 
       notes, 
       modal, 
-      glucoseSelected, 
-      indexSelected } = this.props;
+      indexSelected 
+    } = this.props;
     return (
         <View>
 
@@ -33,13 +34,18 @@ componentWillMount(){
               time={item.time}
               index={index}
               modal={modal} 
-              glucoseSelected={glucoseSelected}
               indexSelected={indexSelected}/>
           ))}
 
       </View>
     );
   }
+}
+
+List.propTypes = {
+  notes: PropTypes.array,
+  modal: PropTypes.bool,
+  indexSelected: PropTypes.number
 }
 
 const mapDispatchToProps = dispatch => {

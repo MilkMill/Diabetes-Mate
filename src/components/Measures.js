@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
 
+import MesDateBlock from './MesDateBlock';
 import MeasureBlock from './MeasureBlock'
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as listActions from "../actions/list";
-import DateBlock from './DateBlock';
 
 class Measures extends Component {
 
@@ -33,7 +34,7 @@ class Measures extends Component {
 
             {/* INPUTS_BLOCK */}
 
-            <DateBlock 
+            <MesDateBlock 
                 timeInput={this.props.timeInput} 
                 dateInput={this.props.dateInput}
                 timePicked={this.props.timePicked}
@@ -64,6 +65,12 @@ class Measures extends Component {
       )
   }
 }
+
+Measures.propTypes = {
+    glucoseInput: PropTypes.string,
+    insulinInput: PropTypes.string,
+    breadUnitsInput: PropTypes.string,
+  }
   
   const mapDispatchToProps = dispatch => {
     return { actions: bindActionCreators(listActions, dispatch) };

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity , Button, Modal} from 'react-native';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as listActions from "../actions/list";
 
-import ListItemRewrite from "../containers/ListItemRewrite";
-
-class MeasuresItem extends Component {
+class ListMeasuresItem extends Component {
 
   render() {
     const { 
@@ -51,6 +50,11 @@ class MeasuresItem extends Component {
   }
 }
 
+ListMeasuresItem.propTypes = {
+  type: PropTypes.string,
+  thing: PropTypes.string,
+}
+
 const mapDispatchToProps = dispatch => {
   return { actions: bindActionCreators(listActions, dispatch)};
 };
@@ -79,5 +83,7 @@ const styles = StyleSheet.create({
   });
 
 
+
+
   
-  export default connect(null, mapDispatchToProps)(MeasuresItem);
+  export default connect(null, mapDispatchToProps)(ListMeasuresItem);

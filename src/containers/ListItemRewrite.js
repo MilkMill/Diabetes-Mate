@@ -87,6 +87,18 @@ class ListItemRewrite extends Component {
   }
 }
 
+ListItemRewrite.propTypes = {
+  notes: PropTypes.array,
+  glucoseInput: PropTypes.string,
+  breadUnitsInput: PropTypes.string,
+  insulinInput: PropTypes.string,
+  dateInput: PropTypes.string,
+  timeInput: PropTypes.string,
+  datePicked: PropTypes.string,
+  timePicked: PropTypes.string,
+  dateMS: PropTypes.number,
+}
+
 const mapDispatchToProps = dispatch => {
   return { actions: bindActionCreators(listActions , dispatch)};
 };
@@ -108,18 +120,4 @@ const mapStateToProps = state => {
   };
 };
 
-ListItemRewrite.propTypes = {
-  notes: PropTypes.array,
-  glucoseInput: PropTypes.string,
-  breadUnitsInput: PropTypes.string,
-  insulinInput: PropTypes.string,
-  dateInput: PropTypes.string,
-  timeInput: PropTypes.string,
-  datePicked: PropTypes.string,
-  timePicked: PropTypes.string,
-  dateMS: PropTypes.number,
-}
-
-
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(ListItemRewrite);
+export default connect(mapStateToProps, mapDispatchToProps)(ListItemRewrite);

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types';
+
 import DatePicker from 'react-native-datepicker'
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as listActions from "../actions/list";
 
-class DateBlock extends Component {
+class MesDateBlock extends Component {
 
 componentWillMount(){
     this.calculateDate();
@@ -172,6 +174,13 @@ componentDidUpdate(){
       )
   }
 }
+
+MesDateBlock.propTypes = {
+    datePicked: PropTypes.string,
+    timePicked: PropTypes.string,
+    dateInput: PropTypes.string,
+    timeInput: PropTypes.string,
+}
   
   const mapDispatchToProps = dispatch => {
     return { actions: bindActionCreators(listActions, dispatch) };
@@ -232,4 +241,4 @@ globalView: {
             },
 });
 
-export default connect(null, mapDispatchToProps)(DateBlock);
+export default connect(null, mapDispatchToProps)(MesDateBlock);

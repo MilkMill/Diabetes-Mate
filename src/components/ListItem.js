@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity , Button, Modal} from 'react-native';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as listActions from "../actions/list";
 
 import ListItemRewrite from "../containers/ListItemRewrite";
-import MeasuresItem from './MeasuresItem';
+import ListMeasuresItem from './ListMeasuresItem';
 
 class ListItem extends Component {
 
@@ -23,7 +24,6 @@ class ListItem extends Component {
 
   render() {
     const { 
-        notes,
         index,
         glucose,
         breadUnits,
@@ -31,7 +31,6 @@ class ListItem extends Component {
         date,
         time,
         modal,
-        glucoseSelected,
         indexSelected
     } = this.props;
 
@@ -45,17 +44,17 @@ class ListItem extends Component {
 
           <View style={styles.measuresItemsView}>
 
-            <MeasuresItem
+            <ListMeasuresItem
               thing={glucose}
               type="glucose"
             />
                   
-            <MeasuresItem
+            <ListMeasuresItem
               thing={breadUnits}
               type="breadUnits"
             />
             
-            <MeasuresItem
+            <ListMeasuresItem
               thing={insulin}
               type="insulin"
             />
@@ -86,6 +85,19 @@ class ListItem extends Component {
     );
   }
 }
+
+
+ListItem.propTypes = {
+  index: PropTypes.number,
+  glucose: PropTypes.string,
+  breadUnits: PropTypes.string,
+  insulin: PropTypes.string,
+  date: PropTypes.string,
+  time: PropTypes.string,
+  modal: PropTypes.bool,
+  indexSelected: PropTypes.number,
+}
+
 
 const mapDispatchToProps = dispatch => {
   return { actions: bindActionCreators(listActions, dispatch)};

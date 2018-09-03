@@ -10,8 +10,18 @@ import AddingButton from '../components/AddingButton';
 
 class App extends Component {
   render() {
-    const { notes, glucoseInput, breadUnitsInput, insulinInput, dateInput, datePicked, timeInput, timePicked, dateMS } = this.props;
-    const { modal, glucoseSelected, indexSelected} = this.props;
+    const { 
+      notes, 
+      glucoseInput, 
+      breadUnitsInput, 
+      insulinInput, 
+      dateInput, 
+      datePicked, 
+      timeInput, 
+      timePicked, 
+      dateMS,
+      modal,
+      indexSelected } = this.props;
     return (
       <ScrollView>
 
@@ -30,9 +40,9 @@ class App extends Component {
 
         <AddingButton 
           notes={notes} 
-          glucoseInput={glucoseInput} 
-          breadUnitsInput={breadUnitsInput} 
-          insulinInput={insulinInput} 
+          glucoseInput={glucoseInput === 'hollow' ? '' : glucoseInput}
+          breadUnitsInput={breadUnitsInput === 'hollow' ? '' : breadUnitsInput} 
+          insulinInput={insulinInput === 'hollow' ? '' : insulinInput} 
           dateInput={dateInput} 
           datePicked={datePicked}
           timePicked={timePicked}
@@ -43,7 +53,6 @@ class App extends Component {
         <List 
           notes={notes} 
           modal={modal} 
-          glucoseSelected={glucoseSelected} 
           indexSelected={indexSelected}
         />       
        

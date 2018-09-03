@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, TextInput, Slider, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
@@ -77,10 +78,21 @@ class MeasureBlock extends Component {
       )
   }
 }
+
+MeasureBlock.propTypes = {
+    inputValue: PropTypes.string,
+    placeholderName: PropTypes.string,
+    glucose: PropTypes.bool,
+    insulin: PropTypes.bool,
+    breadUnits: PropTypes.bool,
+    result: PropTypes.string,
+    decimal: PropTypes.number,
+    natural: PropTypes.number,
+  }
   
-  const mapDispatchToProps = dispatch => {
-    return { actions: bindActionCreators(listActions, dispatch) };
-  };
+const mapDispatchToProps = dispatch => {
+  return { actions: bindActionCreators(listActions, dispatch) };
+};
 
 const styles = StyleSheet.create( {
 globalView: {

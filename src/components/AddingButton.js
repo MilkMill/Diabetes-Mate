@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
@@ -95,6 +96,16 @@ class AddingButton extends Component {
         </View>
       )
   }
+}
+
+AddingButton.propTypes = {
+  modal: PropTypes.bool,
+  glucoseInput: PropTypes.string,
+  breadUnitsInput: PropTypes.string,
+  insulinInput: PropTypes.string,
+  datePicked: PropTypes.string,
+  timePicked: PropTypes.string,
+  dateMS: PropTypes.number,
 }
 
 const mapDispatchToProps = dispatch => {
